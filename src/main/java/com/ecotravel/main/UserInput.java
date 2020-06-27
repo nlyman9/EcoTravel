@@ -1,3 +1,5 @@
+package com.ecotravel.main;
+
 import java.awt.Component;
 import java.awt.Container;
 import java.awt.event.ActionEvent;
@@ -14,20 +16,21 @@ public class UserInput{
 	public static void main(String[] args){
 		JFrame inputFrame = new JFrame("User Information");
 		inputFrame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-		String startLocation = inputStartLocation(inputFrame);
-		String destLocation = inputDestLocation(inputFrame);
-		int maxTime = inputMaxTime(inputFrame);
+		//String startLocation = inputStartLocation(inputFrame);
+		//String destLocation = inputDestLocation(inputFrame);
+		//int maxTime = inputMaxTime(inputFrame);
 		inputVehicleType(inputFrame, inputFrame.getContentPane());
-		while(vehicleType == null){System.out.println("waiting");} //Loop that only works with print statement
-		if (vehicleType.equals("gas")){
+		//while(vehicleType == null){System.out.println("waiting");} //Loop that only works with print statement
+		
+                if (vehicleType.equals("Gas")){
 			int carMileagePerGallon = inputGasMileage(inputFrame);
 			System.out.println(carMileagePerGallon);
 		}
 		
 		//Debugging purposes
-		System.out.println(startLocation);
-		System.out.println(destLocation);
-		System.out.println(maxTime);
+		//System.out.println(startLocation);
+		//System.out.println(destLocation);
+		//System.out.println(maxTime);
 		System.out.println(vehicleType);
 	}
 	public static String inputStartLocation(final JFrame frame){
@@ -43,9 +46,11 @@ public class UserInput{
 		JOptionPane.PLAIN_MESSAGE, null, null, null));
 	}
 	public static void inputVehicleType(final JFrame frame, Container pane){
+            /*
 		pane.setLayout(new BoxLayout(pane, BoxLayout.Y_AXIS));
 		JLabel lbl = new JLabel ("Select your personal vehicle type:");
 		pane.add(lbl);
+                System.out.println("This is happening");
 		JButton gasButton = new JButton("Gas");
 		gasButton.setAlignmentX(Component.CENTER_ALIGNMENT);
         pane.add(gasButton);
@@ -78,6 +83,26 @@ public class UserInput{
          });    
         frame.pack();
         frame.setVisible(true);
+        */
+            try {
+                Object[] possibleValues = { "Gas", "Electric", "Hybrid" };
+                Object selectedValue = JOptionPane.showInputDialog(null,
+                "Choose a vehicle type", "Vehicle Type",
+                JOptionPane.INFORMATION_MESSAGE, null,
+                possibleValues, possibleValues[0]);
+                if (selectedValue == null) {
+                    System.out.println("User selected cancel");
+
+                }
+                else {
+                    vehicleType = selectedValue.toString();
+                }
+            }
+            catch (NullPointerException e) {
+                System.out.println("User selected cancel");
+                System.exit(0);
+            }
+
 	}
 	public static int inputGasMileage(final JFrame frame){
 		return Integer.valueOf((String)JOptionPane.showInputDialog(frame, "Input the gas mileage (in miles/gallon) of your personal vehicle i", "Gas Mileage",
