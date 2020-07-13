@@ -8,27 +8,39 @@ import java.io.IOException;
 import java.io.InputStreamReader;
 import java.net.HttpURLConnection;
 import java.net.URL;
+import java.net.MalformedURLException;
+import java.net.ProtocolException;
+import java.io.BufferedWriter;
+import java.io.FileWriter;
 //import com.google.gson.Gson;
 
 public class Route {
+    private int distance;
+    private int time;
+    private String directionsList;
+    private int routeEmissions;
     //Replace this string variable with the absolute path to the file your api key is in
-    final static String api_key_path = "D:/Homework/Senior Year/Summer/SWE/api-key.txt";
+    final static String api_key_path = "D:/Coding/NetBeansProjects/EcoTravel API Key/api-key.txt";
     private String apiKey = "";
     String origin;
     String destination;
     private String url;
     private String urlBase = "https://maps.googleapis.com/maps/api/directions/json?origin=";
+    HttpURLConnection con;
     
     //The Route object
     //apiKey - The apiKey associated with the Google Directions API
     //origin - The address the user is starting at
     //destination - The address the user wants to travel to
     //url - the request url that consists of the origin, destination, and api key
-    public Route(String origin, String destination) {
+    public Route(String origin, String destination, int emissionsPerMile) throws MalformedURLException, ProtocolException, IOException {
         this.apiKey = getApiKey();
         this.origin = origin;
         this.destination = destination;
         this.url = urlBase + this.origin + "&destination=" + this.destination + "&key=" + this.apiKey;
+        establishConnection();
+        //Set the distance, time, directionsList, and routeEmissions values
+        parseRouteInfo(emissionsPerMile);
     }
     
     //Get the api key located at a local absolute path api_key_path
@@ -48,31 +60,78 @@ public class Route {
         return key;
     }
     
-    public static void main(String [] args) throws IOException {
-        String origin = "3990+Fifth+Ave+Pittsburgh+PA"; //Tower A
-        String destination = "4200+Fifth+Ave+Pittsburgh+PA"; //Cathedral of Learning
-        //Create a route object using an origin and destination address
-        Route route = new Route(origin, destination);
-        URL myurl = new URL(route.url);
-        //http connection
-        HttpURLConnection con = (HttpURLConnection) myurl.openConnection();
-        //The request is a get request
-        con.setRequestMethod("GET");
-        //Make sure there is an API key at the api_key_path
-        if (route.apiKey.equals("")) {
-            System.exit(1);
-        }
-        //Do the get request on route.url
-        //Gson gson = new Gson(); This is a library to help with JSON structured data, not using yet
-        //Read the response from the get request
+    //Start the connection to the API with the url
+    private void establishConnection() throws MalformedURLException, ProtocolException, IOException {
+        URL myurl = new URL(this.url);
+        this.con = (HttpURLConnection) myurl.openConnection();
+    }
+    
+    //Print the results of the Routes request to the API
+    public void printResults() throws IOException {
+        this.con.setRequestMethod("GET");
         try (BufferedReader in = new BufferedReader(
-                new InputStreamReader(con.getInputStream()))) {
+                new InputStreamReader(this.con.getInputStream()))) {
             String line;
             while ((line = in.readLine()) != null) {
                 System.out.println(line);
             }
         }
-        //Disconnect
-        con.disconnect();
+    }
+    
+    //Print the results of the Routes request to a file
+    public void printResultsToFile() throws IOException {
+        this.con.setRequestMethod("GET");
+        File f = new File("routeResults.json");
+        BufferedWriter writer = new BufferedWriter(new FileWriter(f));
+        try (BufferedReader in = new BufferedReader(
+                new InputStreamReader(this.con.getInputStream()))) {
+            String line;
+            while ((line = in.readLine()) != null) {
+                writer.write(line);
+            }
+            writer.close();
+        }
+    }
+    
+    //Disconnect the connection
+    public void disconnect() {
+        this.con.disconnect();
+    }
+    
+    //Set the distance, time, 
+    private void parseRouteInfo(int emissionsPerMile) {
+        
+        //Parse the JSON file with GSON
+        
+        //Set the emissions per mile
+        this.routeEmissions = emissionsPerMile * this.distance;
+    }
+    
+    //Return the route's distance
+    public int getDistance() {
+        return this.distance;
+    }
+    
+    //Return the route's time
+    public int getTime() {
+        return this.time;
+    }
+    
+    //Return the list of directions
+    public String getDirectionsList() {
+        return this.directionsList;
+    }
+    
+    //Return the route's emissions
+    public int getRouteEmissions() {
+        return this.routeEmissions;
+    }
+    
+    //Calculate the route's emissions
+    public int calculateRouteEmissions(int emissionsPerMile) {
+        int dist = this.getDistance();
+        //Do the calculation
+        this.routeEmissions = emissionsPerMile * dist;
+        return this.routeEmissions;
     }
 }
