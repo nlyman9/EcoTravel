@@ -8,13 +8,13 @@ public class Sort {
 
     class RouteTimeComparator implements Comparator<Route> {
         public int compare(Route a, Route b) {
-            return a.time > b.time ? +1 : a.time < b.time ? -1 : 0;
+            return a.getTime() > b.getTime() ? +1 : a.getTime() < b.getTime() ? -1 : 0;
         }
     }
 
     class RouteEmissionComparator implements Comparator<Route> {
         public int compare(Route a, Route b) {
-            return a.routeEmissions > b.routeEmissions ? +1 : a.routeEmissions < b.routeEmissions ? -1 : 0;
+            return a.getRouteEmissions() > b.getRouteEmissions() ? +1 : a.getRouteEmissions() < b.getRouteEmissions() ? -1 : 0;
         }
     }
 
