@@ -6,9 +6,11 @@ import org.junit.After;
 import org.junit.Before;
 import org.junit.BeforeClass;
 import org.junit.Test;
-import static org.junit.Assert.*;
 
 import java.util.ArrayList;
+
+import static org.junit.Assert.assertEquals;
+import static org.mockito.Mockito.mock;
 
 
 public class SortTest {
@@ -21,25 +23,25 @@ public class SortTest {
             super(origin, destination);
         }
     }
-    FakeRoute route1;
-    FakeRoute route2;
-    FakeRoute route3;
+    Route route1=mock(Route.class);
+    Route route2=mock(Route.class);
+    Route route3=mock(Route.class);;
     ArrayList<Route> routelist1;
+
     @BeforeClass
     public static void setUpClass() {
     }
 
     @Before
     public void setUp() {
-        route1=new FakeRoute("","");
-        route1.time=1;
-        route1.routeEmissions=3.0;
-        route2=new FakeRoute("","");
-        route2.time=3;
-        route2.routeEmissions=2.0;
-        route3=new FakeRoute("","");
-        route3.time=2;
-        route3.routeEmissions=1.0;
+        //route1.time=1;
+        //route1.routeEmissions=3.0;
+        //route2=new FakeRoute("","");
+        //route2.time=3;
+        //route2.routeEmissions=2.0;
+        //route3=new FakeRoute("","");
+        //route3.time=2;
+        //route3.routeEmissions=1.0;
         routelist1=new ArrayList<>();
         routelist1.add(route1);
         routelist1.add(route2);
