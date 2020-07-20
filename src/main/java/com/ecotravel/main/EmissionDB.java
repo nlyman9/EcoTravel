@@ -25,8 +25,8 @@ public class EmissionDB {
         try {
             Connection c=this.connect();
             PreparedStatement ps=c.prepareStatement(q);
-            ps.setString(1, "Ferrari");
-            ps.setString(2, "Testarossa");
+            ps.setString(1, make);
+            ps.setString(2, model);
             ResultSet rs=ps.executeQuery();
             emission=rs.getDouble("co2TailpipeGpm");
 
@@ -35,11 +35,11 @@ public class EmissionDB {
         }
         return emission;
     }
-
+/*
     public static void main(String[] args) {
         EmissionDB edb=new EmissionDB();
         double result=edb.selectEmission("Ferrari", "Testarossa");
         System.out.println("Ferrari Testarossa CO2 emission: " + result);
     }
-
+*/
 }

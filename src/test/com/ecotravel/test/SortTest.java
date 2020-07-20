@@ -15,14 +15,6 @@ import static org.mockito.Mockito.mock;
 
 public class SortTest {
     Sort sort;
-    private class FakeRoute extends Route {
-        public int time;
-        public double routeEmissions;
-
-        public FakeRoute(String origin, String destination) {
-            super(origin, destination);
-        }
-    }
     Route route1=mock(Route.class);
     Route route2=mock(Route.class);
     Route route3=mock(Route.class);;
@@ -60,23 +52,23 @@ public class SortTest {
     @Test
     public void testSortByTime() {
         ArrayList<Route> result=sort.sortByTime();
-        FakeRoute sorted=(FakeRoute)result.get(0);
-        assertEquals(1, sorted.time);
-        sorted=(FakeRoute)result.get(1);
-        assertEquals(2, sorted.time);
-        sorted=(FakeRoute)result.get(2);
-        assertEquals(3, sorted.time);
+        Route sorted=(Route)result.get(0);
+        assertEquals(1, sorted.getTime());
+        sorted=(Route)result.get(1);
+        assertEquals(2, sorted.getTime());
+        sorted=(Route)result.get(2);
+        assertEquals(3, sorted.getTime());
     }
 
     @Test
     public void testSortByEmission() {
         ArrayList<Route> result=sort.sortByEmission();
-        FakeRoute sorted=(FakeRoute)result.get(0);
-        assertEquals(1.0, sorted.routeEmissions, .01);
-        sorted=(FakeRoute)result.get(1);
-        assertEquals(2.0, sorted.routeEmissions, .01);
-        sorted=(FakeRoute)result.get(2);
-        assertEquals(3.0, sorted.routeEmissions, .01);
+        Route sorted=(Route)result.get(0);
+        assertEquals(1.0, sorted.getRouteEmissions(), .01);
+        sorted=(Route)result.get(1);
+        assertEquals(2.0, sorted.getRouteEmissions(), .01);
+        sorted=(Route)result.get(2);
+        assertEquals(3.0, sorted.getRouteEmissions(), .01);
 
     }
 }
