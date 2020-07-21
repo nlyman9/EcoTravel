@@ -36,6 +36,9 @@ public class UserInput extends JFrame implements ActionListener
 {
 	private static String vehicleType;
 	private static String sortBy;
+  private String startLoc;
+  private String destLoc;
+  private float gasMileage;
 	private static JPanel panel;
 	private static JButton factsButton;
 	private static JButton inputButton;
@@ -87,14 +90,14 @@ public class UserInput extends JFrame implements ActionListener
 				JOptionPane.showMessageDialog(null, "Please enter a valid address with numbers and letters.");
 				startLocation = inputStartLocation();
 			}
-			
-		    	String destLocation = inputDestLocation();
+			this.startLoc = startLocation;
+		  String destLocation = inputDestLocation();
 			while(destLocation == "" || (!destLocation.matches(".*[a-zA-Z]+.*")) || !(destLocation.matches(".*\\d.*")))
 			{
 				JOptionPane.showMessageDialog(null, "Please enter a valid address with numbers and letters.");
 				destLocation = inputDestLocation();
 			}
-			
+			this.destLoc = destLocation;
 			try {
 				int maxTime = inputMaxTime();
 				while(maxTime < 1)
@@ -114,8 +117,9 @@ public class UserInput extends JFrame implements ActionListener
 			
 		    	inputVehicleType();
 			if (vehicleType.equals("Gas")){
+      float carMileagePerGallon;
 				try {
-					int carMileagePerGallon = inputGasMileage();
+					carMileagePerGallon = inputGasMileage();
 					while(carMileagePerGallon < 1)
 					{
 						JOptionPane.showMessageDialog(null, "Please input a positive mileage.");
@@ -130,6 +134,7 @@ public class UserInput extends JFrame implements ActionListener
 						carMileagePerGallon = inputGasMileage();
 					}
 				}
+        this.gasMileage = carMileagePerGallon;
 			}
 		}
         	else if (action.equals("Fun Facts")) {
@@ -153,7 +158,8 @@ public class UserInput extends JFrame implements ActionListener
             		JOptionPane.showMessageDialog(null, String.format(funfacts, w, w));
 			
 			};
-			 
+      //Get the route information
+			getRouteInfo(startLoc, destLoc, gasMileage);
 			SwingUtilities.invokeLater(r);
         	}
         	else if (action.equals("Carbon Emissions")) {
@@ -265,8 +271,30 @@ public class UserInput extends JFrame implements ActionListener
                 System.exit(0);
             }
 	}
-	public static int inputGasMileage(){
-		return Integer.valueOf((String)JOptionPane.showInputDialog(new UserInputCop(), "Input the gas mileage (in miles/gallon) of your personal vehicle:", "Gas Mileage",
+	public static float inputGasMileage(){
+		return Float.valueOf((String)JOptionPane.showInputDialog(new UserInputCop(), "Input the gas mileage (in miles/gallon) of your personal vehicle:", "Gas Mileage",
 		JOptionPane.PLAIN_MESSAGE, null, null, null));
 	}
+}
+public void getRouteInfo(String startAddress, String destAddress, float carMileagePerGallon) {
+    try {
+        route = new Route(startAddress, destAddress, carMileagePerGallon);
+        //System.out.println("Route disconnected");
+    }
+    catch (MalformedURLException e) {
+        System.out.println("Malformed url exception occurred");
+        e.printStackTrace();
+    }
+    catch (ProtocolException e) {
+        System.out.println("Protocol Exception occurred");
+        e.printStackTrace();
+    }
+    catch (IOException e) {
+        System.out.println("IO Exception occurred");
+        e.printStackTrace();
+    }
+    catch (ParseException e) {
+        System.out.println("Parse Exception occurred");
+        e.printStackTrace();
+    }  
 }

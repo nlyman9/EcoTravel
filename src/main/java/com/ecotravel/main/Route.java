@@ -11,14 +11,20 @@ import java.net.URL;
 import java.net.MalformedURLException;
 import java.net.ProtocolException;
 import java.io.BufferedWriter;
+import java.io.FileReader;
 import java.io.FileWriter;
-//import com.google.gson.Gson;
+import java.text.DecimalFormat;
+import org.json.simple.JSONArray;
+import org.json.simple.JSONObject;
+import org.json.simple.parser.JSONParser;
+import org.json.simple.parser.ParseException;
+import java.util.ArrayList;
 
 public class Route {
-    private int distance;
+    private float distance;
     private int time;
-    private String directionsList;
-    private int routeEmissions;
+    private ArrayList<String> directionsList;
+    private float routeEmissions;
     //Replace this string variable with the absolute path to the file your api key is in
     final static String api_key_path = "D:/Coding/NetBeansProjects/EcoTravel API Key/api-key.txt";
     private String apiKey = "";
@@ -33,14 +39,16 @@ public class Route {
     //origin - The address the user is starting at
     //destination - The address the user wants to travel to
     //url - the request url that consists of the origin, destination, and api key
-    public Route(String origin, String destination, int emissionsPerMile) throws MalformedURLException, ProtocolException, IOException {
+    public Route(String origin, String destination, float emissionsPerMile) throws MalformedURLException, ProtocolException, IOException, ParseException {
         this.apiKey = getApiKey();
         this.origin = origin;
         this.destination = destination;
         this.url = urlBase + this.origin + "&destination=" + this.destination + "&key=" + this.apiKey;
+        this.directionsList = new ArrayList<>();
         establishConnection();
         //Set the distance, time, directionsList, and routeEmissions values
         parseRouteInfo(emissionsPerMile);
+        this.con.disconnect();
     }
     
     //Get the api key located at a local absolute path api_key_path
@@ -98,17 +106,75 @@ public class Route {
         this.con.disconnect();
     }
     
-    //Set the distance, time, 
-    private void parseRouteInfo(int emissionsPerMile) {
+    //Set the distance and time of the route 
+    private void parseRouteInfo(float emissionsPerMile) throws MalformedURLException, ProtocolException, IOException, ParseException {
+        //Perform the get request
+        this.con.setRequestMethod("GET");
+        //Parse the JSON file with JSON-Simple
+        //File f = new File("routeResults.json");
+        StringBuilder strBuild = new StringBuilder();
+        try (BufferedReader in = new BufferedReader(
+                new InputStreamReader(this.con.getInputStream()))) {
+            String line;
+            while ((line = in.readLine()) != null) {
+                strBuild.append(line);
+            }
+            in.close();
+        }
+        catch(Exception e) {
+        }
+        String json = strBuild.toString();          //This is the full string of results from the query
         
-        //Parse the JSON file with GSON
+        //Parse this string for distance, time, directions list etc.
+        JSONParser parser = new JSONParser();
+        Object obj = parser.parse(json);
+        JSONObject jb = (JSONObject) obj;
         
-        //Set the emissions per mile
-        this.routeEmissions = emissionsPerMile * this.distance;
+        //Read the data
+        JSONArray routesArray = (JSONArray) jb.get("routes");
+        JSONObject thisRoute = (JSONObject) routesArray.get(0);
+        JSONArray legs = (JSONArray) thisRoute.get("legs");
+        JSONObject thisLeg = (JSONObject) legs.get(0);
+        JSONObject totalDistance = (JSONObject) thisLeg.get("distance");
+        JSONObject totalDuration = (JSONObject) thisLeg.get("duration");
+        JSONArray steps = (JSONArray) thisLeg.get("steps");
+        //Set the Directions
+        for (int i = 0; i < steps.size(); i++) {
+            JSONObject thisStep = (JSONObject) steps.get(i);
+            String htmlinstructions = thisStep.get("html_instructions").toString();
+            this.directionsList.add(normalize(htmlinstructions));
+        }
+        //Set the route distance
+        String[] dist = totalDistance.get("text").toString().split(" ");
+        String[] dur = totalDuration.get("text").toString().split(" ");
+        //Set the time
+        this.time = Integer.parseInt(dur[0]);
+        //Set the distance
+        this.distance = Float.parseFloat(dist[0]);
+        //Set the route emissions
+        this.routeEmissions = calculateRouteEmissions(emissionsPerMile);
+        
+        System.out.println("The total distance of the route is: " + this.getDistance());
+        System.out.println("Emissions: " + this.getRouteEmissions() + " gallons");
+        System.out.println("The total time of the route is: " + this.getTime());
+        System.out.println("The list of directions: " + this.directionsList);
     }
     
+    //Parse the string without the html elements
+    private String normalize(String instructions) {
+        String[] inst = instructions.split("<(.*?)>");
+        StringBuilder str = new StringBuilder();
+        for (int i = 0; i < inst.length; i++) {
+            String[] dest = inst[i].split(" ");
+            if (dest[0].equals("Destination")) {
+                str.append(" - ");
+            }
+                str.append(inst[i]);
+        }
+        return str.toString();
+    }
     //Return the route's distance
-    public int getDistance() {
+    public float getDistance() {
         return this.distance;
     }
     
@@ -118,20 +184,21 @@ public class Route {
     }
     
     //Return the list of directions
-    public String getDirectionsList() {
+    public ArrayList<String> getDirectionsList() {
         return this.directionsList;
     }
     
     //Return the route's emissions
-    public int getRouteEmissions() {
+    public float getRouteEmissions() {
         return this.routeEmissions;
     }
     
     //Calculate the route's emissions
-    public int calculateRouteEmissions(int emissionsPerMile) {
-        int dist = this.getDistance();
-        //Do the calculation
-        this.routeEmissions = emissionsPerMile * dist;
-        return this.routeEmissions;
+    public float calculateRouteEmissions(float emissionsPerMile) {
+        if (emissionsPerMile == -1) {
+            return -1;
+        }
+        DecimalFormat df2 = new DecimalFormat("#.##");
+        return Float.parseFloat(df2.format(this.getDistance() / emissionsPerMile));
     }
 }
