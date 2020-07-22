@@ -24,7 +24,7 @@ public class Route {
     private float distance;
     private int time;
     private ArrayList<String> directionsList;
-    private float routeEmissions;
+    private double routeEmissions;
     //Replace this string variable with the absolute path to the file your api key is in
     final static String api_key_path = "D:/Coding/NetBeansProjects/EcoTravel API Key/api-key.txt";
     private String apiKey = "";
@@ -39,15 +39,13 @@ public class Route {
     //origin - The address the user is starting at
     //destination - The address the user wants to travel to
     //url - the request url that consists of the origin, destination, and api key
-    public Route(String origin, String destination, float emissionsPerMile) throws MalformedURLException, ProtocolException, IOException, ParseException {
+    public Route(String origin, String destination) throws MalformedURLException, ProtocolException, IOException, ParseException {
         this.apiKey = getApiKey();
         this.origin = origin;
         this.destination = destination;
         this.url = urlBase + this.origin + "&destination=" + this.destination + "&key=" + this.apiKey;
         this.directionsList = new ArrayList<>();
-        establishConnection();
         //Set the distance, time, directionsList, and routeEmissions values
-        parseRouteInfo(emissionsPerMile);
         this.con.disconnect();
     }
     
@@ -69,7 +67,7 @@ public class Route {
     }
     
     //Start the connection to the API with the url
-    private void establishConnection() throws MalformedURLException, ProtocolException, IOException {
+    public void connect() throws MalformedURLException, ProtocolException, IOException {
         URL myurl = new URL(this.url);
         this.con = (HttpURLConnection) myurl.openConnection();
     }
@@ -107,12 +105,11 @@ public class Route {
     }
     
     //Set the distance and time of the route 
-    private void parseRouteInfo(float emissionsPerMile) throws MalformedURLException, ProtocolException, IOException, ParseException {
-        //Perform the get request
+    public void getRouteInfo(double emissionsPerMile) throws MalformedURLException, ProtocolException, IOException, ParseException {
+        //Perform the request
         this.con.setRequestMethod("GET");
-        //Parse the JSON file with JSON-Simple
-        //File f = new File("routeResults.json");
         StringBuilder strBuild = new StringBuilder();
+        //Read in the results
         try (BufferedReader in = new BufferedReader(
                 new InputStreamReader(this.con.getInputStream()))) {
             String line;
@@ -153,11 +150,6 @@ public class Route {
         this.distance = Float.parseFloat(dist[0]);
         //Set the route emissions
         this.routeEmissions = calculateRouteEmissions(emissionsPerMile);
-        
-        System.out.println("The total distance of the route is: " + this.getDistance());
-        System.out.println("Emissions: " + this.getRouteEmissions() + " gallons");
-        System.out.println("The total time of the route is: " + this.getTime());
-        System.out.println("The list of directions: " + this.directionsList);
     }
     
     //Parse the string without the html elements
@@ -189,16 +181,16 @@ public class Route {
     }
     
     //Return the route's emissions
-    public float getRouteEmissions() {
+    public double getRouteEmissions() {
         return this.routeEmissions;
     }
     
     //Calculate the route's emissions
-    public float calculateRouteEmissions(float emissionsPerMile) {
+    public double calculateRouteEmissions(double emissionsPerMile) {
         if (emissionsPerMile == -1) {
             return -1;
         }
         DecimalFormat df2 = new DecimalFormat("#.##");
-        return Float.parseFloat(df2.format(this.getDistance() / emissionsPerMile));
+        return Double.parseDouble(df2.format(this.getDistance() / emissionsPerMile));
     }
 }
