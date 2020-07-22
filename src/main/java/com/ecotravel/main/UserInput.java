@@ -237,15 +237,15 @@ public class UserInput extends JFrame implements ActionListener
 		u.setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);    
 	}
 	public static String inputStartLocation(){
-		return (String)JOptionPane.showInputDialog(new UserInputCop(), "Input starting location address:", "Starting Location",
+		return (String)JOptionPane.showInputDialog(new UserInput(), "Input starting location address:", "Starting Location",
 		JOptionPane.PLAIN_MESSAGE, null, null, null);
 	}
 	public static String inputDestLocation(){
-		return (String)JOptionPane.showInputDialog(new UserInputCop(), "Input destination location address:", "Destination Location",
+		return (String)JOptionPane.showInputDialog(new UserInput(), "Input destination location address:", "Destination Location",
 		JOptionPane.PLAIN_MESSAGE, null, null, null);
 	}
 	public static int inputMaxTime(){
-		return Integer.valueOf((String)JOptionPane.showInputDialog(new UserInputCop(), "Input the maximum amount of time (in minutes) you have to travel:", "Max Time",
+		return Integer.valueOf((String)JOptionPane.showInputDialog(new UserInput(), "Input the maximum amount of time (in minutes) you have to travel:", "Max Time",
 		JOptionPane.PLAIN_MESSAGE, null, null, null));
 	}
 	public static void inputVehicleType(){
@@ -268,7 +268,7 @@ public class UserInput extends JFrame implements ActionListener
             }
 	}
 	public static float inputGasMileage(){
-		return Float.valueOf((String)JOptionPane.showInputDialog(new UserInputCop(), "Input the gas mileage (in miles/gallon) of your personal vehicle:", "Gas Mileage",
+		return Float.valueOf((String)JOptionPane.showInputDialog(new UserInput(), "Input the gas mileage (in miles/gallon) of your personal vehicle:", "Gas Mileage",
 		JOptionPane.PLAIN_MESSAGE, null, null, null));
 	}
         public void getRouteInfo(String startAddress, String destAddress, double carMileagePerGallon) {
