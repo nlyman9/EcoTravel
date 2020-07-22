@@ -31,14 +31,12 @@ import javax.swing.WindowConstants;
 import java.awt.Image;
 import java.awt.Insets;
 import javax.swing.*;
+import org.json.simple.parser.ParseException;
 
 public class UserInput extends JFrame implements ActionListener
 {
 	private static String vehicleType;
 	private static String sortBy;
-  private String startLoc;
-  private String destLoc;
-  private float gasMileage;
 	private static JPanel panel;
 	private static JButton factsButton;
 	private static JButton inputButton;
@@ -84,20 +82,18 @@ public class UserInput extends JFrame implements ActionListener
         	String action = ae.getActionCommand();
         	if (action.equals("Input Route Info")) 
 		{
-			String startLocation = inputStartLocation();
+                        String startLocation = inputStartLocation();
 			while(startLocation == "" || (!startLocation.matches(".*[a-zA-Z]+.*")) || !(startLocation.matches(".*\\d.*")))
 			{
 				JOptionPane.showMessageDialog(null, "Please enter a valid address with numbers and letters.");
 				startLocation = inputStartLocation();
 			}
-			this.startLoc = startLocation;
-		  String destLocation = inputDestLocation();
+                        String destLocation = inputDestLocation();
 			while(destLocation == "" || (!destLocation.matches(".*[a-zA-Z]+.*")) || !(destLocation.matches(".*\\d.*")))
 			{
 				JOptionPane.showMessageDialog(null, "Please enter a valid address with numbers and letters.");
 				destLocation = inputDestLocation();
 			}
-			this.destLoc = destLocation;
 			try {
 				int maxTime = inputMaxTime();
 				while(maxTime < 1)
@@ -116,8 +112,8 @@ public class UserInput extends JFrame implements ActionListener
 			}
 			
 		    	inputVehicleType();
+                        double carMileagePerGallon = 0.0d;
 			if (vehicleType.equals("Gas")){
-      float carMileagePerGallon;
 				try {
 					carMileagePerGallon = inputGasMileage();
 					while(carMileagePerGallon < 1)
@@ -127,15 +123,15 @@ public class UserInput extends JFrame implements ActionListener
 					}
 				} catch(NumberFormatException el) {
 					JOptionPane.showMessageDialog(null, "Please input a valid number for mileage.");
-					int carMileagePerGallon = inputGasMileage();	
+					carMileagePerGallon = inputGasMileage();	
 					while(carMileagePerGallon < 1)
 					{
 						JOptionPane.showMessageDialog(null, "Please input a positive mileage.");
 						carMileagePerGallon = inputGasMileage();
 					}
 				}
-        this.gasMileage = carMileagePerGallon;
 			}
+                        getRouteInfo(startLocation, destLocation, carMileagePerGallon);
 		}
         	else if (action.equals("Fun Facts")) {
 			Runnable r = () -> {
@@ -159,7 +155,7 @@ public class UserInput extends JFrame implements ActionListener
 			
 			};
       //Get the route information
-			getRouteInfo(startLoc, destLoc, gasMileage);
+			
 			SwingUtilities.invokeLater(r);
         	}
         	else if (action.equals("Carbon Emissions")) {
@@ -275,26 +271,38 @@ public class UserInput extends JFrame implements ActionListener
 		return Float.valueOf((String)JOptionPane.showInputDialog(new UserInputCop(), "Input the gas mileage (in miles/gallon) of your personal vehicle:", "Gas Mileage",
 		JOptionPane.PLAIN_MESSAGE, null, null, null));
 	}
+        public void getRouteInfo(String startAddress, String destAddress, double carMileagePerGallon) {
+                try {
+                    //Generate a new route using the user inputs
+                    Route route = new Route(startAddress, destAddress);
+                    //Connect to the api
+                    route.connect();
+                    //Perform get request and set route information
+                    route.getRouteInfo(carMileagePerGallon);
+                    System.out.println("The total distance of the route is: " + route.getDistance());
+                    System.out.println("Emissions: " + route.getRouteEmissions() + " gallons");
+                    System.out.println("The total time of the route is: " + route.getTime());
+                    System.out.println("The list of directions: " + route.getDirectionsList());
+                    //Disconnect the connection
+                    route.disconnect();
+                    System.out.println("Route disconnected");
+                }
+                catch (MalformedURLException e) {
+                    System.out.println("Malformed url exception occurred");
+                    e.printStackTrace();
+                }
+                catch (ProtocolException e) {
+                    System.out.println("Protocol Exception occurred");
+                    e.printStackTrace();
+                }
+                catch (IOException e) {
+                    System.out.println("IO Exception occurred");
+                    e.printStackTrace();
+                }
+                catch (ParseException e) {
+                    System.out.println("Parse Exception occurred");
+                    e.printStackTrace();
+                }  
+        }
 }
-public void getRouteInfo(String startAddress, String destAddress, float carMileagePerGallon) {
-    try {
-        route = new Route(startAddress, destAddress, carMileagePerGallon);
-        //System.out.println("Route disconnected");
-    }
-    catch (MalformedURLException e) {
-        System.out.println("Malformed url exception occurred");
-        e.printStackTrace();
-    }
-    catch (ProtocolException e) {
-        System.out.println("Protocol Exception occurred");
-        e.printStackTrace();
-    }
-    catch (IOException e) {
-        System.out.println("IO Exception occurred");
-        e.printStackTrace();
-    }
-    catch (ParseException e) {
-        System.out.println("Parse Exception occurred");
-        e.printStackTrace();
-    }  
-}
+
