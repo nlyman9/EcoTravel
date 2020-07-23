@@ -23,6 +23,9 @@ import javax.swing.plaf.basic.*;
 import java.io.*;
 import javax.imageio.*;
 import java.net.*;
+import java.util.Arrays;
+import java.util.ArrayList;
+import java.util.List;
 import java.awt.Dimension;
 import java.awt.Font;
 import java.awt.GridBagLayout;
@@ -37,6 +40,7 @@ public class UserInput extends JFrame implements ActionListener
 {
 	private static String vehicleType;
 	private static String sortBy;
+	private static GridBagConstraints gbc;
 	private static JPanel panel;
 	private static JButton factsButton;
 	private static JButton inputButton;
@@ -44,9 +48,12 @@ public class UserInput extends JFrame implements ActionListener
 	private static JRadioButton emissionsRadioButton;
 	private static JRadioButton timeRadioButton;
 	private static JLabel label;
+	private static JTextArea routesArea;
 	//private static Image image;
 	private static final String IMAGE_PATH = "https://previews.123rf.com/images/jannoon028/jannoon0281410/jannoon028141000642/33085360-green-eco-earth-green-earth-with-trees-vector-illustration.jpg";
     	private static JLabel funfacts;
+    	private static ArrayList<Route> routesList; 
+    	private static Sort sort;
 	
 	public UserInput() 
 	{
@@ -58,17 +65,17 @@ public class UserInput extends JFrame implements ActionListener
 		factsButton = new JButton("Fun Facts");
 		inputButton = new JButton("Input Route Info");
 		
-		//Sort Options
+		//Sort option radio buttons
 		sortByLabel = new JLabel("Sort routes by:");
 		emissionsRadioButton = new JRadioButton("Carbon Emissions");
 		emissionsRadioButton.setSelected(true);
+		sortBy = "Emissions";
 		emissionsRadioButton.setOpaque(false);
 		timeRadioButton = new JRadioButton("Time");
 		timeRadioButton.setOpaque(false);
 		ButtonGroup sortButtons = new ButtonGroup();
 		sortButtons.add(emissionsRadioButton);
 		sortButtons.add(timeRadioButton);
-		
 		
 		factsButton.addActionListener(this);
 		inputButton.addActionListener(this);
@@ -79,21 +86,23 @@ public class UserInput extends JFrame implements ActionListener
 	@Override
 	public void actionPerformed(ActionEvent ae) 
 	{
-        	String action = ae.getActionCommand();
+		String action = ae.getActionCommand();
         	if (action.equals("Input Route Info")) 
-		{
-                        String startLocation = inputStartLocation();
+		{	
+            		String startLocation = inputStartLocation();
 			while(startLocation == "" || (!startLocation.matches(".*[a-zA-Z]+.*")) || !(startLocation.matches(".*\\d.*")))
 			{
 				JOptionPane.showMessageDialog(null, "Please enter a valid address with numbers and letters.");
 				startLocation = inputStartLocation();
 			}
-                        String destLocation = inputDestLocation();
+			
+           		String destLocation = inputDestLocation();
 			while(destLocation == "" || (!destLocation.matches(".*[a-zA-Z]+.*")) || !(destLocation.matches(".*\\d.*")))
 			{
 				JOptionPane.showMessageDialog(null, "Please enter a valid address with numbers and letters.");
 				destLocation = inputDestLocation();
 			}
+			
 			try {
 				int maxTime = inputMaxTime();
 				while(maxTime < 1)
@@ -112,7 +121,7 @@ public class UserInput extends JFrame implements ActionListener
 			}
 			
 		    	inputVehicleType();
-                        double carMileagePerGallon = 0.0d;
+            		double carMileagePerGallon = 0.0d;
 			if (vehicleType.equals("Gas")){
 				try {
 					carMileagePerGallon = inputGasMileage();
@@ -131,7 +140,29 @@ public class UserInput extends JFrame implements ActionListener
 					}
 				}
 			}
-                        getRouteInfo(startLocation, destLocation, carMileagePerGallon);
+			
+			//Replace all spaces with + for the maps api
+			String startAddress = startLocation.replace(' ', '+');  
+			String destAddress = destLocation.replace(' ', '+');
+			//Create routes array list
+			routesList = new ArrayList<Route>();
+			//Get car route
+			getRouteInfo(startAddress, destAddress, carMileagePerGallon);
+			//Get bus route
+			
+			//Get bike route
+			
+			//Get walking route
+			
+			//Sort array list
+			sort = new Sort(routesList);
+			if (sortBy.equals("Emission")) {
+				routesList = sort.sortByEmission();
+			}
+			else if (sortBy.equals("Time")) {
+				routesList = sort.sortByTime();
+			}
+			displayRoutes();
 		}
         	else if (action.equals("Fun Facts")) {
 			Runnable r = () -> {
@@ -149,22 +180,29 @@ public class UserInput extends JFrame implements ActionListener
 			+ "\nSince 1870, global sea levels have risen by about 8 inches"
 			+ "\nThough Americans make up just 4 percent of the world's population, we produce 25 percent of the carbon dioxide pollution from fossil-fuel burning.";
 			
-            		int w = 175;
+			int w = 175;
 
             		JOptionPane.showMessageDialog(null, String.format(funfacts, w, w));
 			
 			};
-      //Get the route information
 			
 			SwingUtilities.invokeLater(r);
         	}
         	else if (action.equals("Carbon Emissions")) {
 			sortBy = "Emission";
+			if (routesList != null) {
+				routesList = sort.sortByEmission();
+				displayRoutes();
+			}
 		}
 		else if (action.equals("Time")) {
 			sortBy = "Time";
+			if(routesList != null) {
+				routesList = sort.sortByTime();
+				displayRoutes();
+			} 
 		}
-    	}
+	}
 	
 	public static void main(String[] args){
 	///	JLabel lblNewLabel = new Jlabel("");
@@ -199,7 +237,7 @@ public class UserInput extends JFrame implements ActionListener
 		//button.setBounds(200, 100, size.width, size.height); //for testing 
 
 		panel.setLayout(new GridBagLayout());  
-		GridBagConstraints gbc = new GridBagConstraints();
+		gbc = new GridBagConstraints();
 		
 		gbc.anchor = GridBagConstraints.NORTH;
 		gbc.fill = GridBagConstraints.HORIZONTAL;
@@ -271,38 +309,77 @@ public class UserInput extends JFrame implements ActionListener
 		return Float.valueOf((String)JOptionPane.showInputDialog(new UserInput(), "Input the gas mileage (in miles/gallon) of your personal vehicle:", "Gas Mileage",
 		JOptionPane.PLAIN_MESSAGE, null, null, null));
 	}
-        public void getRouteInfo(String startAddress, String destAddress, double carMileagePerGallon) {
-                try {
-                    //Generate a new route using the user inputs
-                    Route route = new Route(startAddress, destAddress);
-                    //Connect to the api
-                    route.connect();
-                    //Perform get request and set route information
-                    route.getRouteInfo(carMileagePerGallon);
-                    System.out.println("The total distance of the route is: " + route.getDistance());
-                    System.out.println("Emissions: " + route.getRouteEmissions() + " gallons");
-                    System.out.println("The total time of the route is: " + route.getTime());
-                    System.out.println("The list of directions: " + route.getDirectionsList());
-                    //Disconnect the connection
-                    route.disconnect();
-                    System.out.println("Route disconnected");
-                }
-                catch (MalformedURLException e) {
-                    System.out.println("Malformed url exception occurred");
-                    e.printStackTrace();
-                }
-                catch (ProtocolException e) {
-                    System.out.println("Protocol Exception occurred");
-                    e.printStackTrace();
-                }
-                catch (IOException e) {
-                    System.out.println("IO Exception occurred");
-                    e.printStackTrace();
-                }
-                catch (ParseException e) {
-                    System.out.println("Parse Exception occurred");
-                    e.printStackTrace();
-                }  
+	public static void displayRoutes() {
+		//Remove previous routes info if on panel
+    		List<Component> componentList = Arrays.asList(panel.getComponents());
+    		if (componentList.contains(routesArea)) {
+    			panel.remove(routesArea);
+    		}
+		//Initialize new text area and settings
+		routesArea = new JTextArea();
+		routesArea.setOpaque(false);
+        	routesArea.setEditable(false);
+        	routesArea.setLineWrap(true);
+        	routesArea.setWrapStyleWord(true);
+		String routesInfo = "";
+		String transportType;
+		//Add each routes' information to text area
+		for (Route route : routesList) {;
+			transportType = "Car";
+			routesInfo += transportType + " Route\n"
+					+ "\tDistance: " + route.getDistance() + " miles\n"
+					+ "\tEmissions: " + route.getRouteEmissions() + " pounds\n"
+					+ "\tTime: " + route.getTime() + " minutes\n"
+					+ "\tDirections: " + route.getDirectionsList() + "\n";
+		}
+		routesArea.setText(routesInfo);
+		//Place text area on panel
+        	gbc.gridx = 0;
+		gbc.gridy = 5;
+		gbc.gridwidth = 5;
+		panel.add(routesArea, gbc);
+		panel.revalidate();
+	}
+    public void getRouteInfo(String startAddress, String destAddress, double carMileagePerGallon) {
+            try {
+            	//Calculate emissions per mile
+            	double emissionsPerMile = 0;
+            	if (vehicleType.equals("Gas")) {
+            		emissionsPerMile = 19.6/carMileagePerGallon; 	//average gasoline CO2 emissions: 8887g/gal = 19.6lb/gal
+            	}
+            	else if (vehicleType.equals("Electric")) {
+            		emissionsPerMile = 0.35; 			//average electric CO2 emissions: 0.35lb/gal
+            	}
+            	else if (vehicleType.equals("Hybrid")){
+            		emissionsPerMile = 0.42; 			//average hybrid CO2 emissionsL 0.42lb/gal
+            	}
+                //Generate a new route using the user inputs
+                Route route = new Route(startAddress, destAddress);
+                //Add route to array list
+                routesList.add(route);
+                //Connect to the api
+                route.connect();
+                //Perform get request and set route information
+                route.getRouteInfo(emissionsPerMile);
+                //Disconnect from the api
+                route.disconnect();
+            }
+            catch (MalformedURLException e) {
+                System.out.println("Malformed url exception occurred");
+                e.printStackTrace();
+            }
+            catch (ProtocolException e) {
+                System.out.println("Protocol Exception occurred");
+                e.printStackTrace();
+            }
+            catch (IOException e) {
+                System.out.println("IO Exception occurred");
+                e.printStackTrace();
+            }
+            catch (ParseException e) {
+                System.out.println("Parse Exception occurred");
+                e.printStackTrace();
+            }  
         }
 }
 
