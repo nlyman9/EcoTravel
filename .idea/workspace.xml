@@ -1,0 +1,233 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="BranchesTreeState">
+    <expand>
+      <path>
+        <item name="ROOT" type="e8cecc67:BranchNodeDescriptor" />
+        <item name="LOCAL_ROOT" type="e8cecc67:BranchNodeDescriptor" />
+      </path>
+      <path>
+        <item name="ROOT" type="e8cecc67:BranchNodeDescriptor" />
+        <item name="REMOTE_ROOT" type="e8cecc67:BranchNodeDescriptor" />
+      </path>
+      <path>
+        <item name="ROOT" type="e8cecc67:BranchNodeDescriptor" />
+        <item name="REMOTE_ROOT" type="e8cecc67:BranchNodeDescriptor" />
+        <item name="GROUP_NODE:origin" type="e8cecc67:BranchNodeDescriptor" />
+      </path>
+    </expand>
+    <select />
+  </component>
+  <component name="ChangeListManager">
+    <list default="true" id="d347bdb7-7ced-4150-bebe-86ebbf0a4e28" name="Default Changelist" comment="Emission data and pseudo-database class">
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+    </list>
+    <option name="SHOW_DIALOG" value="false" />
+    <option name="HIGHLIGHT_CONFLICTS" value="true" />
+    <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
+    <option name="LAST_RESOLUTION" value="IGNORE" />
+  </component>
+  <component name="CodeInsightWorkspaceSettings">
+    <option name="optimizeImportsOnTheFly" value="true" />
+  </component>
+  <component name="FileTemplateManagerImpl">
+    <option name="RECENT_TEMPLATES">
+      <list>
+        <option value="Class" />
+      </list>
+    </option>
+  </component>
+  <component name="Git.Settings">
+    <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
+  </component>
+  <component name="ProjectId" id="1e5m8v4w9SkczF4iNl0s59iNzO1" />
+  <component name="ProjectLevelVcsManager" settingsEditedManually="true">
+    <ConfirmationsSetting value="1" id="Add" />
+  </component>
+  <component name="ProjectViewState">
+    <option name="hideEmptyMiddlePackages" value="true" />
+    <option name="showLibraryContents" value="true" />
+  </component>
+  <component name="PropertiesComponent">
+    <property name="ASKED_ADD_EXTERNAL_FILES" value="true" />
+    <property name="Downloaded.Files.Path.Enabled" value="false" />
+    <property name="Repository.Attach.Annotations" value="false" />
+    <property name="Repository.Attach.JavaDocs" value="false" />
+    <property name="Repository.Attach.Sources" value="false" />
+    <property name="RunOnceActivity.OpenProjectViewOnStart" value="true" />
+    <property name="RunOnceActivity.ShowReadmeOnStart" value="true" />
+    <property name="last_opened_file_path" value="$PROJECT_DIR$" />
+    <property name="project.structure.last.edited" value="Modules" />
+    <property name="project.structure.proportion" value="0.15" />
+    <property name="project.structure.side.proportion" value="0.2" />
+    <property name="settings.editor.selected.configurable" value="editor.preferences.fonts.default" />
+  </component>
+  <component name="RecentsManager">
+    <key name="MoveClassesOrPackagesDialog.RECENTS_KEY">
+      <recent name="" />
+    </key>
+    <key name="MoveFile.RECENT_KEYS">
+      <recent name="E:\Docs\Courses\CS1530\EcoTravel\src\main\java\com\ecotravel\test" />
+    </key>
+  </component>
+  <component name="RunManager" selected="Application.EmissionDB">
+    <configuration name="EmissionDB" type="Application" factoryName="Application" temporary="true" nameIsGenerated="true">
+      <option name="MAIN_CLASS_NAME" value="com.ecotravel.main.EmissionDB" />
+      <module name="EcoTravel" />
+      <extension name="coverage">
+        <pattern>
+          <option name="PATTERN" value="com.ecotravel.main.*" />
+          <option name="ENABLED" value="true" />
+        </pattern>
+      </extension>
+      <method v="2">
+        <option name="Make" enabled="true" />
+      </method>
+    </configuration>
+    <configuration name="SortTest.testSortByTime" type="JUnit" factoryName="JUnit" temporary="true" nameIsGenerated="true">
+      <module name="EcoTravel" />
+      <extension name="coverage">
+        <pattern>
+          <option name="PATTERN" value="com.ecotravel.test.*" />
+          <option name="ENABLED" value="true" />
+        </pattern>
+      </extension>
+      <option name="PACKAGE_NAME" value="com.ecotravel.test" />
+      <option name="MAIN_CLASS_NAME" value="com.ecotravel.test.SortTest" />
+      <option name="METHOD_NAME" value="testSortByTime" />
+      <option name="TEST_OBJECT" value="method" />
+      <method v="2">
+        <option name="Make" enabled="true" />
+      </method>
+    </configuration>
+    <recent_temporary>
+      <list>
+        <item itemvalue="Application.EmissionDB" />
+        <item itemvalue="JUnit.SortTest.testSortByTime" />
+      </list>
+    </recent_temporary>
+  </component>
+  <component name="SvnConfiguration">
+    <configuration />
+  </component>
+  <component name="TaskManager">
+    <task active="true" id="Default" summary="Default task">
+      <changelist id="d347bdb7-7ced-4150-bebe-86ebbf0a4e28" name="Default Changelist" comment="" />
+      <created>1593619671898</created>
+      <option name="number" value="Default" />
+      <option name="presentableId" value="Default" />
+      <updated>1593619671898</updated>
+    </task>
+    <task id="LOCAL-00001" summary="Unit test for Sort class">
+      <created>1594152395540</created>
+      <option name="number" value="00001" />
+      <option name="presentableId" value="LOCAL-00001" />
+      <option name="project" value="LOCAL" />
+      <updated>1594152395541</updated>
+    </task>
+    <task id="LOCAL-00002" summary="Unit test runner class">
+      <created>1594153915520</created>
+      <option name="number" value="00002" />
+      <option name="presentableId" value="LOCAL-00002" />
+      <option name="project" value="LOCAL" />
+      <updated>1594153915520</updated>
+    </task>
+    <task id="LOCAL-00003" summary="Emission data and pseudo-database class">
+      <created>1594155677482</created>
+      <option name="number" value="00003" />
+      <option name="presentableId" value="LOCAL-00003" />
+      <option name="project" value="LOCAL" />
+      <updated>1594155677482</updated>
+    </task>
+    <option name="localTasksCounter" value="4" />
+    <servers />
+  </component>
+  <component name="Vcs.Log.Tabs.Properties">
+    <option name="TAB_STATES">
+      <map>
+        <entry key="MAIN">
+          <value>
+            <State />
+          </value>
+        </entry>
+      </map>
+    </option>
+    <option name="oldMeFiltersMigrated" value="true" />
+  </component>
+  <component name="VcsManagerConfiguration">
+    <MESSAGE value="Unit test for Sort class" />
+    <MESSAGE value="Unit test runner class" />
+    <MESSAGE value="Emission data and pseudo-database class" />
+    <option name="LAST_COMMIT_MESSAGE" value="Emission data and pseudo-database class" />
+  </component>
+  <component name="WindowStateProjectService">
+    <state x="440" y="94" key="#Project_Structure" timestamp="1595267104689">
+      <screen x="0" y="0" width="1920" height="1040" />
+    </state>
+    <state x="440" y="94" key="#Project_Structure/0.0.1920.1040@0.0.1920.1040" timestamp="1595267104689" />
+    <state x="681" y="198" key="#com.intellij.ide.util.frameworkSupport.AddFrameworkSupportDialog" timestamp="1594142872895">
+      <screen x="0" y="0" width="1920" height="1040" />
+    </state>
+    <state x="681" y="198" key="#com.intellij.ide.util.frameworkSupport.AddFrameworkSupportDialog/0.0.1920.1040@0.0.1920.1040" timestamp="1594142872895" />
+    <state x="790" y="213" key="#com.intellij.openapi.roots.ui.configuration.libraryEditor.LibraryEditorDialog" timestamp="1595105818685">
+      <screen x="0" y="0" width="1920" height="1040" />
+    </state>
+    <state x="790" y="213" key="#com.intellij.openapi.roots.ui.configuration.libraryEditor.LibraryEditorDialog/0.0.1920.1040@0.0.1920.1040" timestamp="1595105818685" />
+    <state x="736" y="383" key="#com.intellij.refactoring.move.moveClassesOrPackages.MoveClassesOrPackagesDialog.classes" timestamp="1594151034782">
+      <screen x="0" y="0" width="1920" height="1040" />
+    </state>
+    <state x="736" y="383" key="#com.intellij.refactoring.move.moveClassesOrPackages.MoveClassesOrPackagesDialog.classes/0.0.1920.1040@0.0.1920.1040" timestamp="1594151034782" />
+    <state x="690" y="274" key="#com.intellij.util.ui.classpath.ChooseLibrariesDialog" timestamp="1595105822918">
+      <screen x="0" y="0" width="1920" height="1040" />
+    </state>
+    <state x="690" y="274" key="#com.intellij.util.ui.classpath.ChooseLibrariesDialog/0.0.1920.1040@0.0.1920.1040" timestamp="1595105822918" />
+    <state x="184" y="86" key="DiffContextDialog" timestamp="1594135479999">
+      <screen x="0" y="0" width="1920" height="1040" />
+    </state>
+    <state x="184" y="86" key="DiffContextDialog/0.0.1920.1040@0.0.1920.1040" timestamp="1594135479999" />
+    <state x="622" y="296" key="FileChooserDialogImpl" timestamp="1595267101697">
+      <screen x="0" y="0" width="1920" height="1040" />
+    </state>
+    <state x="622" y="296" key="FileChooserDialogImpl/0.0.1920.1040@0.0.1920.1040" timestamp="1595267101697" />
+    <state width="1877" height="282" key="GridCell.Tab.0.bottom" timestamp="1595294179957">
+      <screen x="0" y="0" width="1920" height="1040" />
+    </state>
+    <state width="1877" height="282" key="GridCell.Tab.0.bottom/0.0.1920.1040@0.0.1920.1040" timestamp="1595294179957" />
+    <state width="1877" height="282" key="GridCell.Tab.0.center" timestamp="1595294179957">
+      <screen x="0" y="0" width="1920" height="1040" />
+    </state>
+    <state width="1877" height="282" key="GridCell.Tab.0.center/0.0.1920.1040@0.0.1920.1040" timestamp="1595294179957" />
+    <state width="1877" height="282" key="GridCell.Tab.0.left" timestamp="1595294179957">
+      <screen x="0" y="0" width="1920" height="1040" />
+    </state>
+    <state width="1877" height="282" key="GridCell.Tab.0.left/0.0.1920.1040@0.0.1920.1040" timestamp="1595294179957" />
+    <state width="1877" height="282" key="GridCell.Tab.0.right" timestamp="1595294179957">
+      <screen x="0" y="0" width="1920" height="1040" />
+    </state>
+    <state width="1877" height="282" key="GridCell.Tab.0.right/0.0.1920.1040@0.0.1920.1040" timestamp="1595294179957" />
+    <state x="461" y="164" key="SettingsEditor" timestamp="1595431288194">
+      <screen x="0" y="0" width="1920" height="1040" />
+    </state>
+    <state x="461" y="164" key="SettingsEditor/0.0.1920.1040@0.0.1920.1040" timestamp="1595431288194" />
+    <state x="552" y="253" key="Vcs.Push.Dialog.v2" timestamp="1594152417515">
+      <screen x="0" y="0" width="1920" height="1040" />
+    </state>
+    <state x="552" y="253" key="Vcs.Push.Dialog.v2/0.0.1920.1040@0.0.1920.1040" timestamp="1594152417515" />
+    <state x="658" y="411" key="com.intellij.jarRepository.RepositoryAttachDialog-DOWNLOAD" timestamp="1595105879910">
+      <screen x="0" y="0" width="1920" height="1040" />
+    </state>
+    <state x="658" y="411" key="com.intellij.jarRepository.RepositoryAttachDialog-DOWNLOAD/0.0.1920.1040@0.0.1920.1040" timestamp="1595105879910" />
+    <state x="677" y="307" key="git4idea.merge.GitPullDialog" timestamp="1594135499124">
+      <screen x="0" y="0" width="1920" height="1040" />
+    </state>
+    <state x="677" y="307" key="git4idea.merge.GitPullDialog/0.0.1920.1040@0.0.1920.1040" timestamp="1594135499124" />
+    <state x="334" y="130" key="new project wizard" timestamp="1593619996789">
+      <screen x="0" y="0" width="1920" height="1040" />
+    </state>
+    <state x="334" y="130" key="new project wizard/0.0.1920.1040@0.0.1920.1040" timestamp="1593619996789" />
+    <state x="623" y="225" width="672" height="678" key="search.everywhere.popup" timestamp="1595431275134">
+      <screen x="0" y="0" width="1920" height="1040" />
+    </state>
+    <state x="623" y="225" width="672" height="678" key="search.everywhere.popup/0.0.1920.1040@0.0.1920.1040" timestamp="1595431275134" />
+  </component>
+</project>
