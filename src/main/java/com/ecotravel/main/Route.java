@@ -46,7 +46,6 @@ public class Route {
         this.url = urlBase + this.origin + "&destination=" + this.destination + "&key=" + this.apiKey;
         this.directionsList = new ArrayList<>();
         //Set the distance, time, directionsList, and routeEmissions values
-        this.con.disconnect();
     }
     
     //Get the api key located at a local absolute path api_key_path
@@ -191,6 +190,6 @@ public class Route {
             return -1;
         }
         DecimalFormat df2 = new DecimalFormat("#.##");
-        return Double.parseDouble(df2.format(this.getDistance() / emissionsPerMile));
+        return Double.parseDouble(df2.format(this.getDistance() * emissionsPerMile));
     }
 }
