@@ -6,17 +6,19 @@ import java.util.Comparator;
 
 public class Sort {
 
-    class RouteTimeComparator implements Comparator<Route> {
+    Comparator<Route> timeComparator=new Comparator<Route>() {
+        @Override
         public int compare(Route a, Route b) {
             return a.getTime() > b.getTime() ? +1 : a.getTime() < b.getTime() ? -1 : 0;
         }
-    }
+    };
 
-    class RouteEmissionComparator implements Comparator<Route> {
+    Comparator<Route> emissionComparator=new Comparator<Route>() {
+        @Override
         public int compare(Route a, Route b) {
             return a.getRouteEmissions() > b.getRouteEmissions() ? +1 : a.getRouteEmissions() < b.getRouteEmissions() ? -1 : 0;
         }
-    }
+    };
 
     private ArrayList<Route> routesList;
 
@@ -29,12 +31,12 @@ public class Sort {
     }
 
     public ArrayList<Route> sortByTime() {
-        Collections.sort(routesList, new RouteEmissionComparator());
+        Collections.sort(routesList, timeComparator);
         return routesList;
     }
 
     public ArrayList<Route> sortByEmission() {
-        Collections.sort(routesList, new RouteTimeComparator());
+        Collections.sort(routesList, emissionComparator);
         return routesList;
     }
 
