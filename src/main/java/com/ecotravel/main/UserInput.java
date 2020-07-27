@@ -102,9 +102,9 @@ public class UserInput extends JFrame implements ActionListener
 				JOptionPane.showMessageDialog(null, "Please enter a valid address with numbers and letters.");
 				destLocation = inputDestLocation();
 			}
-			
+			int maxTime = 0;
 			try {
-				int maxTime = inputMaxTime();
+				maxTime = inputMaxTime();
 				while(maxTime < 1)
 				{	
 					JOptionPane.showMessageDialog(null, "Please input a positive time in minutes.");
@@ -112,7 +112,7 @@ public class UserInput extends JFrame implements ActionListener
 				}
 			} catch(NumberFormatException e)  {
 				JOptionPane.showMessageDialog(null, "Please input a valid number.");
-				int maxTime = inputMaxTime();
+				maxTime = inputMaxTime();
 				while(maxTime < 1)
 			  	{
 				  	JOptionPane.showMessageDialog(null, "Please input a positive time in minutes.");
@@ -146,14 +146,10 @@ public class UserInput extends JFrame implements ActionListener
 			String destAddress = destLocation.replace(' ', '+');
 			//Create routes array list
 			routesList = new ArrayList<Route>();
-			//Get car route
-			getRouteInfo(startAddress, destAddress, carMileagePerGallon);
-			//Get bus route
-			
-			//Get bike route
-			
-			//Get walking route
-			
+                        
+			//Get all routes information
+			getRouteInfo(startAddress, destAddress, carMileagePerGallon, maxTime);
+                        
 			//Sort array list
 			sort = new Sort(routesList);
 			if (sortBy.equals("Emission")) {
@@ -322,11 +318,9 @@ public class UserInput extends JFrame implements ActionListener
         	routesArea.setLineWrap(true);
         	routesArea.setWrapStyleWord(true);
 		String routesInfo = "";
-		String transportType;
 		//Add each routes' information to text area
-		for (Route route : routesList) {;
-			transportType = "Car";
-			routesInfo += transportType + " Route\n"
+		for (Route route : routesList) {
+			routesInfo += route.getTransportType() + " Route\n"
 					+ "\tDistance: " + route.getDistance() + " miles\n"
 					+ "\tEmissions: " + route.getRouteEmissions() + " pounds\n"
 					+ "\tTime: " + route.getTime() + " minutes\n"
@@ -340,29 +334,52 @@ public class UserInput extends JFrame implements ActionListener
 		panel.add(routesArea, gbc);
 		panel.revalidate();
 	}
-    public void getRouteInfo(String startAddress, String destAddress, double carMileagePerGallon) {
+    public void getRouteInfo(String startAddress, String destAddress, double carMileagePerGallon, int maxTime) {
             try {
-            	//Calculate emissions per mile
-            	double emissionsPerMile = 0;
-            	if (vehicleType.equals("Gas")) {
-            		emissionsPerMile = 19.6/carMileagePerGallon; 	//average gasoline CO2 emissions: 8887g/gal = 19.6lb/gal
-            	}
-            	else if (vehicleType.equals("Electric")) {
-            		emissionsPerMile = 0.35; 			//average electric CO2 emissions: 0.35lb/gal
-            	}
-            	else if (vehicleType.equals("Hybrid")){
-            		emissionsPerMile = 0.42; 			//average hybrid CO2 emissionsL 0.42lb/gal
-            	}
-                //Generate a new route using the user inputs
-                Route route = new Route(startAddress, destAddress);
-                //Add route to array list
-                routesList.add(route);
-                //Connect to the api
-                route.connect();
-                //Perform get request and set route information
-                route.getRouteInfo(emissionsPerMile);
-                //Disconnect from the api
-                route.disconnect();
+                //Generate a the routes using the user inputs
+                Route carRoute = new Route(startAddress, destAddress, "driving");
+                Route busRoute = new Route(startAddress, destAddress, "transit");
+                Route bicycleRoute = new Route(startAddress, destAddress, "bicycling");
+                Route walkingRoute = new Route(startAddress, destAddress, "walking");
+                //Add the routes to the list
+                routesList.add(carRoute);
+                routesList.add(busRoute);
+                routesList.add(bicycleRoute);
+                routesList.add(walkingRoute);
+            	 
+            	double emissionsPerMile = 0.0;
+                //Connect to api and get all the route information
+                for (Route route: routesList) {
+                    //Connect to the api
+                    route.connect();
+                    //Calculate emissions
+                    if (route.getTransportType().equals("driving")) {
+                        if (vehicleType.equals("Gas")) {
+                                emissionsPerMile = 19.6/carMileagePerGallon; 	//average gasoline CO2 emissions: 8887g/gal = 19.6lb/gal
+                        }
+                        else if (vehicleType.equals("Electric")) {
+                                emissionsPerMile = 0.35; 			//average electric CO2 emissions: 0.35lb/mi
+                        }
+                        else if (vehicleType.equals("Hybrid")){
+                                emissionsPerMile = 0.42; 			//average hybrid CO2 emissionsL 0.42lb/mi
+                        }
+                    }
+                    else if (route.getTransportType().equals("transit")) {
+                        emissionsPerMile = 0.25;                               //112.7g/mile average for buses = 0.25lb/mi
+                    }
+                    else {
+                        emissionsPerMile = 0.0;                                   //Biking and walking will have 0 emissionsPerMile
+                    }
+                    //Perform get request and set route information
+                    route.getRouteInfo(emissionsPerMile);
+                    //Disconnect from the api
+                    route.disconnect();
+                    
+                    //Remove the route if it exceeds the user's time constraint
+                    if (route.getTime() > maxTime) {
+                        routesList.remove(route);
+                    }
+                }
             }
             catch (MalformedURLException e) {
                 System.out.println("Malformed url exception occurred");
