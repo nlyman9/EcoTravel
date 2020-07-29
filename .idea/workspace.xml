@@ -20,21 +20,9 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="d347bdb7-7ced-4150-bebe-86ebbf0a4e28" name="Default Changelist" comment="Emission data and pseudo-database class">
-      <change beforePath="$PROJECT_DIR$/.idea/EcoTravel.iml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/EcoTravel.iml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/UserInputCop.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/ecotravel/main/UserInputCop.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/bin/production/EcoTravel/com/ecotravel/main/EmissionDB.class" beforeDir="false" afterPath="$PROJECT_DIR$/bin/production/EcoTravel/com/ecotravel/main/EmissionDB.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/bin/production/EcoTravel/com/ecotravel/main/Route.class" beforeDir="false" afterPath="$PROJECT_DIR$/bin/production/EcoTravel/com/ecotravel/main/Route.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/bin/production/EcoTravel/com/ecotravel/main/Sort$RouteEmissionComparator.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/bin/production/EcoTravel/com/ecotravel/main/Sort$RouteTimeComparator.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/bin/production/EcoTravel/com/ecotravel/main/Sort.class" beforeDir="false" afterPath="$PROJECT_DIR$/bin/production/EcoTravel/com/ecotravel/main/Sort.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/bin/production/EcoTravel/com/ecotravel/main/UserInput.class" beforeDir="false" afterPath="$PROJECT_DIR$/bin/production/EcoTravel/com/ecotravel/main/UserInput.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/bin/test/EcoTravel/com/ecotravel/test/SortTest.class" beforeDir="false" afterPath="$PROJECT_DIR$/bin/test/EcoTravel/com/ecotravel/test/SortTest.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/lib/hamcrest-core-1.3.jar" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/lib/junit-4.13.jar" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/lib/mockito-core-3.4.1.jar" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/ecotravel/main/Sort.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/ecotravel/main/Sort.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/test/com/ecotravel/test/SortTest.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/test/com/ecotravel/test/SortTest.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/ecotravel/main/Route.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/ecotravel/main/Route.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/ecotravel/main/UserInput.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/ecotravel/main/UserInput.java" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />

@@ -1,40 +1,20 @@
 package com.ecotravel.main;
 
-import java.awt.Component;
-import java.awt.Container;
+import org.json.simple.parser.ParseException;
+
+import javax.imageio.ImageIO;
+import javax.swing.*;
+import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import javax.swing.BoxLayout;
-import javax.swing.JButton;
-import javax.swing.JFrame;
-import javax.swing.JLabel;
-import javax.swing.JOptionPane;
-import javax.swing.JPanel;
-import javax.swing.BorderFactory;
-import java.awt.BorderLayout;
-import java.awt.GridLayout;
-import java.awt.Color;
-import javax.swing.ImageIcon;
-import javax.swing.SwingConstants;
-import java.awt.event.*;
-import java.awt.FlowLayout;
-import javax.swing.border.*;
-import javax.swing.plaf.basic.*;
-import java.io.*;
-import javax.imageio.*;
-import java.net.*;
-import java.util.Arrays;
+import java.awt.image.BufferedImage;
+import java.io.IOException;
+import java.net.MalformedURLException;
+import java.net.ProtocolException;
+import java.net.URL;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
-import java.awt.Dimension;
-import java.awt.Font;
-import java.awt.GridBagLayout;
-import java.awt.GridBagConstraints;
-import javax.swing.WindowConstants;
-import java.awt.Image;
-import java.awt.Insets;
-import javax.swing.*;
-import org.json.simple.parser.ParseException;
 
 public class UserInput extends JFrame implements ActionListener
 {
@@ -49,6 +29,7 @@ public class UserInput extends JFrame implements ActionListener
 	private static JRadioButton timeRadioButton;
 	private static JLabel label;
 	private static JTextArea routesArea;
+	private static JLabel map;
 	//private static Image image;
 	private static final String IMAGE_PATH = "https://previews.123rf.com/images/jannoon028/jannoon0281410/jannoon028141000642/33085360-green-eco-earth-green-earth-with-trees-vector-illustration.jpg";
     	private static JLabel funfacts;
@@ -398,5 +379,31 @@ public class UserInput extends JFrame implements ActionListener
                 e.printStackTrace();
             }  
         }
+
+        public void getMap(ArrayList<Route> rl) {
+			String uimg="https://maps.googleapis.com/maps/api/staticmap?size=" + 300 + "x" + 200;
+			for (Route r: rl) {
+				uimg += "&path=enc:" + r.getPoly();
+			}
+			uimg += "&key=" + rl.get(0).getKey();
+			try {
+				URL url=new URL(uimg);
+				BufferedImage img= ImageIO.read(url);
+				map=new JLabel(new ImageIcon(img));
+			} catch (MalformedURLException e) {
+				e.printStackTrace();
+				return;
+			} catch (IOException e) {
+				e.printStackTrace();
+				return;
+			} catch (Exception e) {
+				e.printStackTrace();
+				return;
+			}
+			gbc.gridx = 0;
+			gbc.gridy = 2;
+			panel.add(map, gbc);
+			panel.revalidate();
+		}
 }
 
