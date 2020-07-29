@@ -304,6 +304,7 @@ public class UserInput extends JFrame implements ActionListener
 			URL uimg=new URL(route.getImageUrl(300, 200));
 			BufferedImage img= ImageIO.read(uimg);
 			map=new JLabel(new ImageIcon(img));
+			panel.revalidate();
 		} catch (MalformedURLException e) {
 			e.printStackTrace();
 			System.out.println("MalformedURL");
