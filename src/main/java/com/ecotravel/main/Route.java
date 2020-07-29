@@ -1,24 +1,18 @@
 package com.ecotravel.main;
 
-import java.io.File;
-import java.io.FileNotFoundException;
-import java.util.Scanner;
-import java.io.BufferedReader;
-import java.io.IOException;
-import java.io.InputStreamReader;
-import java.net.HttpURLConnection;
-import java.net.URL;
-import java.net.MalformedURLException;
-import java.net.ProtocolException;
-import java.io.BufferedWriter;
-import java.io.FileReader;
-import java.io.FileWriter;
-import java.text.DecimalFormat;
 import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
 import org.json.simple.parser.JSONParser;
 import org.json.simple.parser.ParseException;
+
+import java.io.*;
+import java.net.HttpURLConnection;
+import java.net.MalformedURLException;
+import java.net.ProtocolException;
+import java.net.URL;
+import java.text.DecimalFormat;
 import java.util.ArrayList;
+import java.util.Scanner;
 
 public class Route {
     private float distance;
@@ -27,12 +21,13 @@ public class Route {
     private double routeEmissions;
     //Replace this string variable with the absolute path to the file your api key is in
     final static String api_key_path = "D:/Coding/NetBeansProjects/EcoTravel API Key/api-key.txt";
-    private String apiKey = "";
+    final static String ak = "AIzaSyCmHNaZiRJy5yJPFOBf_xzIcC1ZwJ5UGKs";
     String origin;
     String destination;
+    String polyLine;
     private String url;
     private String urlBase = "https://maps.googleapis.com/maps/api/directions/json?origin=";
-    HttpURLConnection con;
+    HttpURLConnection con=null;
     
     //The Route object
     //apiKey - The apiKey associated with the Google Directions API
@@ -40,20 +35,20 @@ public class Route {
     //destination - The address the user wants to travel to
     //url - the request url that consists of the origin, destination, and api key
     public Route(String origin, String destination) throws MalformedURLException, ProtocolException, IOException, ParseException {
-        this.apiKey = getApiKey();
+        //this.apiKey = getApiKey(api_key_path);
         this.origin = origin;
         this.destination = destination;
-        this.url = urlBase + this.origin + "&destination=" + this.destination + "&key=" + this.apiKey;
+        this.url = urlBase + this.origin + "&destination=" + this.destination + "&key=" + this.ak;
         this.directionsList = new ArrayList<>();
         //Set the distance, time, directionsList, and routeEmissions values
-        this.con.disconnect();
+        //this.con.disconnect();
     }
     
     //Get the api key located at a local absolute path api_key_path
-    private String getApiKey() {
+    private String getApiKey(String path) {
         String key = "";
         try {
-          File api_file = new File(api_key_path);
+          File api_file = new File(path);
           Scanner myReader = new Scanner(api_file);
           key = myReader.nextLine();
           myReader.close();
@@ -105,7 +100,8 @@ public class Route {
     }
     
     //Set the distance and time of the route 
-    public void getRouteInfo(double emissionsPerMile) throws MalformedURLException, ProtocolException, IOException, ParseException {
+    public int getRouteInfo(double emissionsPerMile) throws MalformedURLException, ProtocolException, IOException, ParseException {
+        if (con == null) return -1;
         //Perform the request
         this.con.setRequestMethod("GET");
         StringBuilder strBuild = new StringBuilder();
@@ -119,6 +115,8 @@ public class Route {
             in.close();
         }
         catch(Exception e) {
+            e.printStackTrace();
+            throw e;
         }
         String json = strBuild.toString();          //This is the full string of results from the query
         
@@ -130,6 +128,7 @@ public class Route {
         //Read the data
         JSONArray routesArray = (JSONArray) jb.get("routes");
         JSONObject thisRoute = (JSONObject) routesArray.get(0);
+        JSONObject overview = (JSONObject) thisRoute.get("overview_polyline");
         JSONArray legs = (JSONArray) thisRoute.get("legs");
         JSONObject thisLeg = (JSONObject) legs.get(0);
         JSONObject totalDistance = (JSONObject) thisLeg.get("distance");
@@ -150,6 +149,8 @@ public class Route {
         this.distance = Float.parseFloat(dist[0]);
         //Set the route emissions
         this.routeEmissions = calculateRouteEmissions(emissionsPerMile);
+        this.polyLine = overview.get("points").toString();
+        return 1;
     }
     
     //Parse the string without the html elements
@@ -192,5 +193,10 @@ public class Route {
         }
         DecimalFormat df2 = new DecimalFormat("#.##");
         return Double.parseDouble(df2.format(this.getDistance() / emissionsPerMile));
+    }
+
+    public String getImageUrl(int width, int height) {
+        String uimg="https://maps.googleapis.com/maps/api/staticmap?size=" + width + "x" + height + "&path=enc:" + this.polyLine + "&key=" + this.ak;
+        return uimg;
     }
 }
