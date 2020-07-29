@@ -21,10 +21,11 @@ import org.json.simple.parser.ParseException;
 import java.util.ArrayList;
 
 public class Route {
-    private float distance;
+    private double distance;
     private int time;
     private ArrayList<String> directionsList;
     private double routeEmissions;
+    private String transportType;
     //Replace this string variable with the absolute path to the file your api key is in
     final static String api_key_path = "D:/Coding/NetBeansProjects/EcoTravel API Key/api-key.txt";
     private String apiKey = "";
@@ -39,14 +40,14 @@ public class Route {
     //origin - The address the user is starting at
     //destination - The address the user wants to travel to
     //url - the request url that consists of the origin, destination, and api key
-    public Route(String origin, String destination) throws MalformedURLException, ProtocolException, IOException, ParseException {
+    public Route(String origin, String destination, String transportType) throws MalformedURLException, ProtocolException, IOException, ParseException {
         this.apiKey = getApiKey();
         this.origin = origin;
         this.destination = destination;
-        this.url = urlBase + this.origin + "&destination=" + this.destination + "&key=" + this.apiKey;
+        this.transportType = transportType;
+        this.url = urlBase + this.origin + "&destination=" + this.destination + "&mode=" + this.transportType + "&key=" + this.apiKey;
         this.directionsList = new ArrayList<>();
         //Set the distance, time, directionsList, and routeEmissions values
-        this.con.disconnect();
     }
     
     //Get the api key located at a local absolute path api_key_path
@@ -115,6 +116,7 @@ public class Route {
             String line;
             while ((line = in.readLine()) != null) {
                 strBuild.append(line);
+                System.out.println(line);
             }
             in.close();
         }
@@ -147,7 +149,7 @@ public class Route {
         //Set the time
         this.time = Integer.parseInt(dur[0]);
         //Set the distance
-        this.distance = Float.parseFloat(dist[0]);
+        this.distance = Double.parseDouble(dist[0]);
         //Set the route emissions
         this.routeEmissions = calculateRouteEmissions(emissionsPerMile);
     }
@@ -166,7 +168,7 @@ public class Route {
         return str.toString();
     }
     //Return the route's distance
-    public float getDistance() {
+    public double getDistance() {
         return this.distance;
     }
     
@@ -185,12 +187,19 @@ public class Route {
         return this.routeEmissions;
     }
     
+    //Return the route's transport type
+    public String getTransportType() {
+        return this.transportType;
+    }
+    
     //Calculate the route's emissions
     public double calculateRouteEmissions(double emissionsPerMile) {
         if (emissionsPerMile == -1) {
             return -1;
         }
         DecimalFormat df2 = new DecimalFormat("#.##");
-        return Double.parseDouble(df2.format(this.getDistance() / emissionsPerMile));
+        System.out.println("Distance: " + this.getDistance());
+        System.out.println("Emissions: " + emissionsPerMile);
+        return Double.parseDouble(df2.format(this.getDistance() * emissionsPerMile));
     }
 }
