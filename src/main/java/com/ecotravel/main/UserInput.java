@@ -1,17 +1,37 @@
 package com.ecotravel.main;
 
-import org.json.simple.parser.ParseException;
-
-import javax.imageio.ImageIO;
-import javax.swing.*;
-import java.awt.*;
+import java.awt.Component;
+import java.awt.Container;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.awt.image.BufferedImage;
-import java.io.IOException;
-import java.net.MalformedURLException;
-import java.net.ProtocolException;
-import java.net.URL;
+import javax.swing.BoxLayout;
+import javax.swing.JButton;
+import javax.swing.JFrame;
+import javax.swing.JLabel;
+import javax.swing.JOptionPane;
+import javax.swing.JPanel;
+import javax.swing.BorderFactory;
+import java.awt.BorderLayout;
+import java.awt.GridLayout;
+import java.awt.Color;
+import javax.swing.ImageIcon;
+import javax.swing.SwingConstants;
+import java.awt.event.*;
+import java.awt.FlowLayout;
+import javax.swing.border.*;
+import javax.swing.plaf.basic.*;
+import java.io.*;
+import javax.imageio.*;
+import java.net.*;
+import java.awt.Dimension;
+import java.awt.Font;
+import java.awt.GridBagLayout;
+import java.awt.GridBagConstraints;
+import javax.swing.WindowConstants;
+import java.awt.Image;
+import java.awt.Insets;
+import javax.swing.*;
+import org.json.simple.parser.ParseException;
 
 public class UserInput extends JFrame implements ActionListener
 {
@@ -24,7 +44,6 @@ public class UserInput extends JFrame implements ActionListener
 	private static JRadioButton emissionsRadioButton;
 	private static JRadioButton timeRadioButton;
 	private static JLabel label;
-	private static JLabel map;
 	//private static Image image;
 	private static final String IMAGE_PATH = "https://previews.123rf.com/images/jannoon028/jannoon0281410/jannoon028141000642/33085360-green-eco-earth-green-earth-with-trees-vector-illustration.jpg";
     	private static JLabel funfacts;
@@ -170,8 +189,7 @@ public class UserInput extends JFrame implements ActionListener
 	    	///label.setBounds(50, 50, 100, 30);
 		
 		factsButton.setPreferredSize(new Dimension(160, 45));  //for testing 
-		inputButton.setPreferredSize(new Dimension(160, 45)); //for testing
-		map=new JLabel();
+		inputButton.setPreferredSize(new Dimension(160, 45)); //for testing 
 		///Dimension size = b.getPreferredSize();
 		///Dimension size1 = button.getPreferredSize();
 		///b.setBounds(600, 300, size.width, size.height);
@@ -209,9 +227,6 @@ public class UserInput extends JFrame implements ActionListener
 		gbc.gridx = 3;
 		gbc.gridy = 4;
 		panel.add(factsButton, gbc);
-		gbc.gridx = 0;
-		gbc.gridy = 2;
-		panel.add(map, gbc);
 		
 		///panel.add(background);
 		panel.setBorder(BorderFactory.createEmptyBorder(10, 10, 10, 10));
@@ -256,65 +271,38 @@ public class UserInput extends JFrame implements ActionListener
 		return Float.valueOf((String)JOptionPane.showInputDialog(new UserInputCop(), "Input the gas mileage (in miles/gallon) of your personal vehicle:", "Gas Mileage",
 		JOptionPane.PLAIN_MESSAGE, null, null, null));
 	}
-
-	public void getRouteInfo(String startAddress, String destAddress, double carMileagePerGallon) {
-			try {
-				//Generate a new route using the user inputs
-				Route route = new Route(startAddress, destAddress);
-				//Connect to the api
-				route.connect();
-				//Perform get request and set route information
-				if (route.getRouteInfo(carMileagePerGallon) == -1) {
-					System.out.println("Failed to retrieve route.");
-				}
-				System.out.println("The total distance of the route is: " + route.getDistance());
-				System.out.println("Emissions: " + route.getRouteEmissions() + " gallons");
-				System.out.println("The total time of the route is: " + route.getTime());
-				System.out.println("The list of directions: " + route.getDirectionsList());
-				getImage(route);
-				//Disconnect the connection
-				route.disconnect();
-				System.out.println("Route disconnected");
-			}
-			catch (MalformedURLException e) {
-				System.out.println("Malformed url exception occurred");
-				e.printStackTrace();
-			}
-			catch (ProtocolException e) {
-				System.out.println("Protocol Exception occurred");
-				e.printStackTrace();
-			}
-			catch (IOException e) {
-				JOptionPane.showMessageDialog(null, "Failed to retrieve route", "Warning", JOptionPane.ERROR_MESSAGE);
-				System.out.println("IO Exception occurred");
-				e.printStackTrace();
-			}
-			catch (ParseException e) {
-				System.out.println("Parse Exception occurred");
-				e.printStackTrace();
-			}
-			catch (Exception e) {
-				JOptionPane.showMessageDialog(null, "Failed to retrieve route", "Warning", JOptionPane.ERROR_MESSAGE);
-				e.printStackTrace();
-			}
-	}
-
-	public void getImage(Route route) {
-		try {
-			URL uimg=new URL(route.getImageUrl(300, 200));
-			BufferedImage img= ImageIO.read(uimg);
-			map=new JLabel(new ImageIcon(img));
-		} catch (MalformedURLException e) {
-			e.printStackTrace();
-			System.out.println("MalformedURL");
-		} catch (IOException e) {
-			JOptionPane.showMessageDialog(null, "Failed to retrieve image", "Warning", JOptionPane.ERROR_MESSAGE);
-			e.printStackTrace();
-			System.out.println("IOException");
-		} catch (Exception e) {
-			JOptionPane.showMessageDialog(null, "Failed to retrieve image", "Warning", JOptionPane.ERROR_MESSAGE);
-			e.printStackTrace();
-		}
-	}
+        public void getRouteInfo(String startAddress, String destAddress, double carMileagePerGallon) {
+                try {
+                    //Generate a new route using the user inputs
+                    Route route = new Route(startAddress, destAddress);
+                    //Connect to the api
+                    route.connect();
+                    //Perform get request and set route information
+                    route.getRouteInfo(carMileagePerGallon);
+                    System.out.println("The total distance of the route is: " + route.getDistance());
+                    System.out.println("Emissions: " + route.getRouteEmissions() + " gallons");
+                    System.out.println("The total time of the route is: " + route.getTime());
+                    System.out.println("The list of directions: " + route.getDirectionsList());
+                    //Disconnect the connection
+                    route.disconnect();
+                    System.out.println("Route disconnected");
+                }
+                catch (MalformedURLException e) {
+                    System.out.println("Malformed url exception occurred");
+                    e.printStackTrace();
+                }
+                catch (ProtocolException e) {
+                    System.out.println("Protocol Exception occurred");
+                    e.printStackTrace();
+                }
+                catch (IOException e) {
+                    System.out.println("IO Exception occurred");
+                    e.printStackTrace();
+                }
+                catch (ParseException e) {
+                    System.out.println("Parse Exception occurred");
+                    e.printStackTrace();
+                }  
+        }
 }
 
