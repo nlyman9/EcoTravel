@@ -141,6 +141,7 @@ public class UserInput extends JFrame implements ActionListener
 				routesList = sort.sortByTime();
 			}
 			displayRoutes();
+			getMap(routesList);
 		}
         	else if (action.equals("Fun Facts")) {
 			Runnable r = () -> {
@@ -362,7 +363,6 @@ public class UserInput extends JFrame implements ActionListener
                         routesList.remove(route);
                     }
                 }
-				getMap(routesList);
             }
             catch (MalformedURLException e) {
                 System.out.println("Malformed url exception occurred");
