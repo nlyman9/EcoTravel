@@ -128,7 +128,8 @@ public class Route {
         JSONObject jb = (JSONObject) obj;
         
         //Read the data
-        String st=((JSONObject) jb.get("status")).toString();
+        JSONObject status=(JSONObject) jb.get("status");
+        String st=status.toString();
         if  (st.equals("OK")) {
             routeStatus = RouteStatus.OK;
         } else if (st.equals("NOT_FOUND")) {
