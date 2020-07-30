@@ -21,7 +21,7 @@ public class Route {
     private double routeEmissions;
     private String transportType;
     //Replace this string variable with the absolute path to the file your api key is in
-    final static String api_key_path = "C:/Users/furry/Documents/Mine/Courses/CS1530/tmp/apikey.txt";
+    final static String api_key_path = "C:/Users/Ling/Documents/Pitt/Summer 2020/COE 1530/api_key.txt";
     private String apiKey = "";
     String origin;
     String destination;
