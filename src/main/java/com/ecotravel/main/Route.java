@@ -1,24 +1,18 @@
 package com.ecotravel.main;
 
-import java.io.File;
-import java.io.FileNotFoundException;
-import java.util.Scanner;
-import java.io.BufferedReader;
-import java.io.IOException;
-import java.io.InputStreamReader;
-import java.net.HttpURLConnection;
-import java.net.URL;
-import java.net.MalformedURLException;
-import java.net.ProtocolException;
-import java.io.BufferedWriter;
-import java.io.FileReader;
-import java.io.FileWriter;
-import java.text.DecimalFormat;
 import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
 import org.json.simple.parser.JSONParser;
 import org.json.simple.parser.ParseException;
+
+import java.io.*;
+import java.net.HttpURLConnection;
+import java.net.MalformedURLException;
+import java.net.ProtocolException;
+import java.net.URL;
+import java.text.DecimalFormat;
 import java.util.ArrayList;
+import java.util.Scanner;
 
 public class Route {
     private double distance;
@@ -27,13 +21,14 @@ public class Route {
     private double routeEmissions;
     private String transportType;
     //Replace this string variable with the absolute path to the file your api key is in
-    final static String api_key_path = "D:/Coding/NetBeansProjects/EcoTravel API Key/api-key.txt";
+    final static String api_key_path = "C:/Users/Ling/Documents/Pitt/Summer 2020/COE 1530/api_key.txt";
     private String apiKey = "";
     String origin;
     String destination;
     private String url;
     private String urlBase = "https://maps.googleapis.com/maps/api/directions/json?origin=";
     HttpURLConnection con;
+    private String polyLine;
     
     //The Route object
     //apiKey - The apiKey associated with the Google Directions API
@@ -137,6 +132,7 @@ public class Route {
         JSONObject totalDistance = (JSONObject) thisLeg.get("distance");
         JSONObject totalDuration = (JSONObject) thisLeg.get("duration");
         JSONArray steps = (JSONArray) thisLeg.get("steps");
+        JSONObject overview = (JSONObject) thisRoute.get("overview_polyline");
         //Set the Directions
         for (int i = 0; i < steps.size(); i++) {
             JSONObject thisStep = (JSONObject) steps.get(i);
@@ -152,6 +148,7 @@ public class Route {
         this.distance = Double.parseDouble(dist[0]);
         //Set the route emissions
         this.routeEmissions = calculateRouteEmissions(emissionsPerMile);
+        this.polyLine = overview.get("points").toString();
     }
     
     //Parse the string without the html elements
@@ -201,5 +198,13 @@ public class Route {
         System.out.println("Distance: " + this.getDistance());
         System.out.println("Emissions: " + emissionsPerMile);
         return Double.parseDouble(df2.format(this.getDistance() * emissionsPerMile));
+    }
+
+    public String getKey() {
+        return apiKey;
+    }
+
+    public String getPoly() {
+        return this.polyLine;
     }
 }
