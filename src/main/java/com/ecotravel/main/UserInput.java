@@ -131,6 +131,7 @@ public class UserInput extends JFrame implements ActionListener
                         
 			//Get all routes information
 			getRouteInfo(startAddress, destAddress, carMileagePerGallon, maxTime);
+			getMap(routesList);
                         
 			//Sort array list
 			sort = new Sort(routesList);
@@ -141,7 +142,6 @@ public class UserInput extends JFrame implements ActionListener
 				routesList = sort.sortByTime();
 			}
 			displayRoutes();
-			getMap(routesList);
 		}
         	else if (action.equals("Fun Facts")) {
 			Runnable r = () -> {
