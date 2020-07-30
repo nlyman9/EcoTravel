@@ -1,6 +1,7 @@
 package com.ecotravel.main;
 import org.json.simple.parser.ParseException;
 
+import org.json.simple.parser.ParseException;
 import javax.imageio.ImageIO;
 import javax.swing.*;
 import java.awt.*;
@@ -143,6 +144,7 @@ public class UserInput extends JFrame implements ActionListener
 				routesList = sort.sortByTime();
 			}
 			displayRoutes();
+			getMap(routesList);
 		}
         	else if (action.equals("Fun Facts")) {
 			Runnable r = () -> {
