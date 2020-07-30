@@ -1,7 +1,6 @@
 package com.ecotravel.main;
 import org.json.simple.parser.ParseException;
 
-import org.json.simple.parser.ParseException;
 import javax.imageio.ImageIO;
 import javax.swing.*;
 import java.awt.*;
@@ -36,6 +35,7 @@ public class UserInput extends JFrame implements ActionListener
 	private static ArrayList<Route> routesList; 
     	private static Sort sort;
 	private static final String[] colors={"0x0bba1f", "0x7c0a21", "0xe13d95", "0x813498"};
+	private static boolean haveRoute=false;
 	
 	public UserInput() 
 	{
@@ -130,10 +130,12 @@ public class UserInput extends JFrame implements ActionListener
 			routesList = new ArrayList<Route>();
                         
 			//Get all routes information
+			haveRoute=false;
 			getRouteInfo(startAddress, destAddress, carMileagePerGallon, maxTime);
 			
 			//Get map image
-			getMap(routesList);
+			if (haveRoute)
+				getMap(routesList);
 
 			//Sort array list
 			sort = new Sort(routesList);
@@ -203,7 +205,7 @@ public class UserInput extends JFrame implements ActionListener
 		u.getContentPane().setLayout(new GridLayout(1,2));
 		panel = new JPanel();
 		label = new JLabel("EcoTravel", SwingConstants.CENTER);
-		label.setFont(new Font("Serif", Font.BOLD, 60)); //for testing 
+		label.setFont(new Font("Roboto", Font.BOLD, 60)); //for testing
 		
 	    	///label.setBounds(50, 50, 100, 30);
 		
@@ -305,11 +307,22 @@ public class UserInput extends JFrame implements ActionListener
 		String routesInfo = "";
 		//Add each routes' information to text area
 		for (Route route : routesList) {
-			routesInfo += route.getTransportType() + " Route\n"
-					+ "\tDistance: " + route.getDistance() + " miles\n"
-					+ "\tCarbon Emissions: " + route.getRouteEmissions() + " pounds\n"
-					+ "\tTime: " + route.getTime() + " minutes\n"
-					+ "\tDirections: " + route.getDirectionsList() + "\n";
+			if (route.getStatus() == RouteStatus.OK) {
+				haveRoute=true;
+				routesInfo += route.getTransportType() + " Route\n"
+						+ "\tDistance: " + route.getDistance() + " miles\n"
+						+ "\tCarbon Emissions: " + route.getRouteEmissions() + " pounds\n"
+						+ "\tTime: " + route.getTime() + " minutes\n"
+						+ "\tDirections: " + route.getDirectionsList() + "\n";
+			} else if (route.getStatus() == RouteStatus.NOT_FOUND) {
+				routesInfo += "Location not found. Please re-enter a valid address.\n";
+			} else if (route.getStatus() == RouteStatus.ZERO_RESULTS) {
+				routesInfo += "No route could be found. Please enter different locations.\n";
+			} else if (route.getStatus() == RouteStatus.EMPTY) {
+				routesInfo += "No results. please check your internet connection.\n";
+			} else {
+				routesInfo += "Unknown error.\n";
+			}
 		}
 		routesArea.setText(routesInfo);
 		//Place text area on panel
@@ -360,7 +373,6 @@ public class UserInput extends JFrame implements ActionListener
                     		route.getRouteInfo(emissionsPerMile);
                    		 //Disconnect from the api
                     		route.disconnect();
-                    
                     		//Add the route if it is within the user's time constraint
                     		if (route.getTime() <= maxTime) {
                         		routesList.add(route);
@@ -389,7 +401,8 @@ public class UserInput extends JFrame implements ActionListener
 		String uimg="https://maps.googleapis.com/maps/api/staticmap?size=" + 300 + "x" + 200;
 		int i=0;
 		for (Route r: rl) {
-			uimg += "&path=color:" + colors[i++] + "|enc:" + r.getPoly();
+			if (r.getStatus() == RouteStatus.OK)
+				uimg += "&path=color:" + colors[i++] + "|enc:" + r.getPoly();
 		}
 		uimg += "&key=" + rl.get(0).getKey();
 		try {
