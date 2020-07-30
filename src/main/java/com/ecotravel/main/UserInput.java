@@ -35,7 +35,6 @@ public class UserInput extends JFrame implements ActionListener
 	private static ArrayList<Route> routesList; 
     	private static Sort sort;
 	private static final String[] colors={"0x0bba1f", "0x7c0a21", "0xe13d95", "0x813498"};
-	private static boolean haveRoute=false;
 	
 	public UserInput() 
 	{
@@ -130,12 +129,10 @@ public class UserInput extends JFrame implements ActionListener
 			routesList = new ArrayList<Route>();
                         
 			//Get all routes information
-			haveRoute=false;
 			getRouteInfo(startAddress, destAddress, carMileagePerGallon, maxTime);
 			
 			//Get map image
-			if (haveRoute)
-				getMap(routesList);
+			getMap(routesList);
 
 			//Sort array list
 			sort = new Sort(routesList);
@@ -308,7 +305,6 @@ public class UserInput extends JFrame implements ActionListener
 		//Add each routes' information to text area
 		for (Route route : routesList) {
 			if (route.getStatus() == RouteStatus.OK) {
-				haveRoute=true;
 				routesInfo += route.getTransportType() + " Route\n"
 						+ "\tDistance: " + route.getDistance() + " miles\n"
 						+ "\tCarbon Emissions: " + route.getRouteEmissions() + " pounds\n"

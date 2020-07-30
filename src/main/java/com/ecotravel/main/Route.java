@@ -130,6 +130,7 @@ public class Route {
         //Read the data
         String st=(String)jb.get("status");
         if  (st.equals("OK")) {
+            System.out.println("Route retrieved");
             routeStatus = RouteStatus.OK;
         } else if (st.equals("NOT_FOUND")) {
             routeStatus = RouteStatus.NOT_FOUND;
