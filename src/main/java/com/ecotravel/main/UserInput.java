@@ -1,7 +1,7 @@
 package com.ecotravel.main;
-
 import org.json.simple.parser.ParseException;
 
+import org.json.simple.parser.ParseException;
 import javax.imageio.ImageIO;
 import javax.swing.*;
 import java.awt.*;
@@ -32,18 +32,18 @@ public class UserInput extends JFrame implements ActionListener
 	private static JLabel map;
 	//private static Image image;
 	private static final String IMAGE_PATH = "https://previews.123rf.com/images/jannoon028/jannoon0281410/jannoon028141000642/33085360-green-eco-earth-green-earth-with-trees-vector-illustration.jpg";
-    	private static JLabel funfacts;
-    	private static ArrayList<Route> routesList; 
+	private static JLabel funfacts;
+	private static ArrayList<Route> routesList; 
     	private static Sort sort;
 	private static final String[] colors={"0x0bba1f", "0x7c0a21", "0xe13d95", "0x813498"};
-
+	
 	public UserInput() 
 	{
         	setTitle("EcoTravel");
         	setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         
         	setResizable(false);
-        	setSize(1000, 3000);
+        	setSize(2000, 4000);
 		factsButton = new JButton("Fun Facts");
 		inputButton = new JButton("Input Route Info");
 		
@@ -51,7 +51,7 @@ public class UserInput extends JFrame implements ActionListener
 		sortByLabel = new JLabel("Sort routes by:");
 		emissionsRadioButton = new JRadioButton("Carbon Emissions");
 		emissionsRadioButton.setSelected(true);
-		sortBy = "Emissions";
+		sortBy = "Emission";
 		emissionsRadioButton.setOpaque(false);
 		timeRadioButton = new JRadioButton("Time");
 		timeRadioButton.setOpaque(false);
@@ -131,8 +131,10 @@ public class UserInput extends JFrame implements ActionListener
                         
 			//Get all routes information
 			getRouteInfo(startAddress, destAddress, carMileagePerGallon, maxTime);
+			
+			//Get map image
 			getMap(routesList);
-                        
+
 			//Sort array list
 			sort = new Sort(routesList);
 			if (sortBy.equals("Emission")) {
@@ -241,7 +243,7 @@ public class UserInput extends JFrame implements ActionListener
 		gbc.gridx = 0;
 		gbc.gridy = 4;
 		panel.add(inputButton, gbc);
-		gbc.gridx = 3;
+		gbc.gridx = 4;
 		gbc.gridy = 4;
 		panel.add(factsButton, gbc);
 		
@@ -249,7 +251,7 @@ public class UserInput extends JFrame implements ActionListener
 		panel.setBorder(BorderFactory.createEmptyBorder(10, 10, 10, 10));
 	
      		u.setContentPane(panel);
-		u.getContentPane().setBackground(Color.CYAN);
+		u.getContentPane().setBackground(Color.decode("#87CEEB"));
     		u.setVisible(true);
 		u.setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);    
 	}
@@ -298,14 +300,14 @@ public class UserInput extends JFrame implements ActionListener
 		routesArea = new JTextArea();
 		routesArea.setOpaque(false);
         	routesArea.setEditable(false);
-        	routesArea.setLineWrap(true);
+		routesArea.setLineWrap(true);
         	routesArea.setWrapStyleWord(true);
 		String routesInfo = "";
 		//Add each routes' information to text area
 		for (Route route : routesList) {
 			routesInfo += route.getTransportType() + " Route\n"
 					+ "\tDistance: " + route.getDistance() + " miles\n"
-					+ "\tEmissions: " + route.getRouteEmissions() + " pounds\n"
+					+ "\tCarbon Emissions: " + route.getRouteEmissions() + " pounds\n"
 					+ "\tTime: " + route.getTime() + " minutes\n"
 					+ "\tDirections: " + route.getDirectionsList() + "\n";
 		}
@@ -317,96 +319,97 @@ public class UserInput extends JFrame implements ActionListener
 		panel.add(routesArea, gbc);
 		panel.revalidate();
 	}
-    public void getRouteInfo(String startAddress, String destAddress, double carMileagePerGallon, int maxTime) {
-            try {
-                //Generate a the routes using the user inputs
-                Route carRoute = new Route(startAddress, destAddress, "driving");
-                Route busRoute = new Route(startAddress, destAddress, "transit");
-                Route bicycleRoute = new Route(startAddress, destAddress, "bicycling");
-                Route walkingRoute = new Route(startAddress, destAddress, "walking");
-                //Add the routes to the list
-                routesList.add(carRoute);
-                routesList.add(busRoute);
-                routesList.add(bicycleRoute);
-                routesList.add(walkingRoute);
+	public void getRouteInfo(String startAddress, String destAddress, double carMileagePerGallon, int maxTime) {
+		try {
+                	//Generate a the routes using the user inputs
+                	Route carRoute = new Route(startAddress, destAddress, "driving");
+                	Route busRoute = new Route(startAddress, destAddress, "transit");
+                	Route bicycleRoute = new Route(startAddress, destAddress, "bicycling");
+                	Route walkingRoute = new Route(startAddress, destAddress, "walking");
+                	//Add the routes to the list
+                	ArrayList<Route> allRoutesList = new ArrayList<Route>();;
+                	allRoutesList.add(carRoute);
+                	allRoutesList.add(busRoute);
+                	allRoutesList.add(bicycleRoute);
+                	allRoutesList.add(walkingRoute);
             	 
-            	double emissionsPerMile = 0.0;
-                //Connect to api and get all the route information
-                for (Route route: routesList) {
-                    //Connect to the api
-                    route.connect();
-                    //Calculate emissions
-                    if (route.getTransportType().equals("driving")) {
-                        if (vehicleType.equals("Gas")) {
-                                emissionsPerMile = 19.6/carMileagePerGallon; 	//average gasoline CO2 emissions: 8887g/gal = 19.6lb/gal
-                        }
-                        else if (vehicleType.equals("Electric")) {
-                                emissionsPerMile = 0.35; 			//average electric CO2 emissions: 0.35lb/mi
-                        }
-                        else if (vehicleType.equals("Hybrid")){
-                                emissionsPerMile = 0.42; 			//average hybrid CO2 emissionsL 0.42lb/mi
-                        }
-                    }
-                    else if (route.getTransportType().equals("transit")) {
-                        emissionsPerMile = 0.25;                               //112.7g/mile average for buses = 0.25lb/mi
-                    }
-                    else {
-                        emissionsPerMile = 0.0;                                   //Biking and walking will have 0 emissionsPerMile
-                    }
-                    //Perform get request and set route information
-                    route.getRouteInfo(emissionsPerMile);
-                    //Disconnect from the api
-                    route.disconnect();
+            		double emissionsPerMile = 0.0;
+                	//Connect to api and get all the route information
+                	for (Route route: allRoutesList) {
+                    		//Connect to the api
+                    		route.connect();
+                    		//Calculate emissions
+                    		if (route.getTransportType().equals("driving")) {
+                        		if (vehicleType.equals("Gas")) {
+                                		emissionsPerMile = 19.6/carMileagePerGallon; 	//average gasoline CO2 emissions: 8887g/gal = 19.6lb/gal
+                       			}
+                        		else if (vehicleType.equals("Electric")) {
+                                		emissionsPerMile = 0.35; 			//average electric CO2 emissions: 0.35lb/mi
+                       			}
+                        		else if (vehicleType.equals("Hybrid")){
+                                		emissionsPerMile = 0.42; 			//average hybrid CO2 emissionsL 0.42lb/mi
+                        		}
+                    		}
+                    		else if (route.getTransportType().equals("transit")) {
+                        		emissionsPerMile = 0.25;                               //112.7g/mile average for buses = 0.25lb/mi
+                    		}
+                    		else {
+                        		emissionsPerMile = 0.0;                                   //Biking and walking will have 0 emissionsPerMile
+                    		}
+                    		//Perform get request and set route information
+                    		route.getRouteInfo(emissionsPerMile);
+                   		 //Disconnect from the api
+                    		route.disconnect();
                     
-                    //Remove the route if it exceeds the user's time constraint
-                    if (route.getTime() > maxTime) {
-                        routesList.remove(route);
-                    }
-                }
-            }
-            catch (MalformedURLException e) {
-                System.out.println("Malformed url exception occurred");
-                e.printStackTrace();
-            }
-            catch (ProtocolException e) {
-                System.out.println("Protocol Exception occurred");
-                e.printStackTrace();
-            }
-            catch (IOException e) {
-                System.out.println("IO Exception occurred");
-                e.printStackTrace();
-            }
-            catch (ParseException e) {
-                System.out.println("Parse Exception occurred");
-                e.printStackTrace();
-            }  
+                    		//Add the route if it is within the user's time constraint
+                    		if (route.getTime() <= maxTime) {
+                        		routesList.add(route);
+                   		}
+                	}
+            	}
+           	catch (MalformedURLException e) {
+                	System.out.println("Malformed url exception occurred");
+                	e.printStackTrace();
+            	}
+            	catch (ProtocolException e) {
+                	System.out.println("Protocol Exception occurred");
+                	e.printStackTrace();
+            	}
+            	catch (IOException e) {
+                	System.out.println("IO Exception occurred");
+                	e.printStackTrace();
+            	}
+            	catch (ParseException e) {
+                	System.out.println("Parse Exception occurred");
+                	e.printStackTrace();
+            	}   
         }
 
         public void getMap(ArrayList<Route> rl) {
-			String uimg="https://maps.googleapis.com/maps/api/staticmap?size=" + 300 + "x" + 200;
-			int i=0;
-			for (Route r: rl) {
-				uimg += "&path=color:" + colors[i++] + "|enc:" + r.getPoly();
-			}
-			uimg += "&key=" + rl.get(0).getKey();
-			try {
-				URL url=new URL(uimg);
-				BufferedImage img= ImageIO.read(url);
-				map=new JLabel(new ImageIcon(img));
-			} catch (MalformedURLException e) {
-				e.printStackTrace();
-				return;
-			} catch (IOException e) {
-				e.printStackTrace();
-				return;
-			} catch (Exception e) {
-				e.printStackTrace();
-				return;
-			}
-			gbc.gridx = 0;
-			gbc.gridy = 2;
-			panel.add(map, gbc);
-			panel.revalidate();
+		String uimg="https://maps.googleapis.com/maps/api/staticmap?size=" + 300 + "x" + 200;
+		int i=0;
+		for (Route r: rl) {
+			uimg += "&path=color:" + colors[i++] + "|enc:" + r.getPoly();
 		}
+		uimg += "&key=" + rl.get(0).getKey();
+		try {
+			URL url=new URL(uimg);
+			BufferedImage img= ImageIO.read(url);
+			map=new JLabel(new ImageIcon(img));
+		} catch (MalformedURLException e) {
+			e.printStackTrace();
+			return;
+		} catch (IOException e) {
+			e.printStackTrace();
+			return;
+		} catch (Exception e) {
+			e.printStackTrace();
+			return;
+		}
+		gbc.gridx = 2;
+		gbc.gridy = 4;
+		panel.add(map, gbc);
+		panel.revalidate();
+	}
 }
 
