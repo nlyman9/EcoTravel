@@ -41,6 +41,6 @@ public class Sort {
     }
 
     public boolean belowMaxTime(Route route) {
-        return false;
+        return timeComparator.compare(route, Collections.max(routesList, timeComparator)) < 0;
     }
 }

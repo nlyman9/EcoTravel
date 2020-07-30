@@ -36,6 +36,7 @@
     <option name="RECENT_TEMPLATES">
       <list>
         <option value="Class" />
+        <option value="Enum" />
       </list>
     </option>
   </component>
@@ -153,9 +154,9 @@
     <recent_temporary>
       <list>
         <item itemvalue="Application.UserInput" />
-        <item itemvalue="JUnit.SortTest" />
         <item itemvalue="JUnit.SortTest.testSortByEmission" />
         <item itemvalue="JUnit.SortTest.testSortByTime" />
+        <item itemvalue="JUnit.SortTest" />
         <item itemvalue="JUnit.SortTest.testComparEmission" />
       </list>
     </recent_temporary>
@@ -242,22 +243,22 @@
       <screen x="0" y="0" width="1920" height="1040" />
     </state>
     <state x="622" y="296" key="FileChooserDialogImpl/0.0.1920.1040@0.0.1920.1040" timestamp="1595723456637" />
-    <state width="1877" height="282" key="GridCell.Tab.0.bottom" timestamp="1596067745971">
+    <state width="1877" height="282" key="GridCell.Tab.0.bottom" timestamp="1596111105229">
       <screen x="0" y="0" width="1920" height="1040" />
     </state>
-    <state width="1877" height="282" key="GridCell.Tab.0.bottom/0.0.1920.1040@0.0.1920.1040" timestamp="1596067745971" />
-    <state width="1877" height="282" key="GridCell.Tab.0.center" timestamp="1596067745971">
+    <state width="1877" height="282" key="GridCell.Tab.0.bottom/0.0.1920.1040@0.0.1920.1040" timestamp="1596111105229" />
+    <state width="1877" height="282" key="GridCell.Tab.0.center" timestamp="1596111105229">
       <screen x="0" y="0" width="1920" height="1040" />
     </state>
-    <state width="1877" height="282" key="GridCell.Tab.0.center/0.0.1920.1040@0.0.1920.1040" timestamp="1596067745971" />
-    <state width="1877" height="282" key="GridCell.Tab.0.left" timestamp="1596067745970">
+    <state width="1877" height="282" key="GridCell.Tab.0.center/0.0.1920.1040@0.0.1920.1040" timestamp="1596111105229" />
+    <state width="1877" height="282" key="GridCell.Tab.0.left" timestamp="1596111105229">
       <screen x="0" y="0" width="1920" height="1040" />
     </state>
-    <state width="1877" height="282" key="GridCell.Tab.0.left/0.0.1920.1040@0.0.1920.1040" timestamp="1596067745970" />
-    <state width="1877" height="282" key="GridCell.Tab.0.right" timestamp="1596067745971">
+    <state width="1877" height="282" key="GridCell.Tab.0.left/0.0.1920.1040@0.0.1920.1040" timestamp="1596111105229" />
+    <state width="1877" height="282" key="GridCell.Tab.0.right" timestamp="1596111105229">
       <screen x="0" y="0" width="1920" height="1040" />
     </state>
-    <state width="1877" height="282" key="GridCell.Tab.0.right/0.0.1920.1040@0.0.1920.1040" timestamp="1596067745971" />
+    <state width="1877" height="282" key="GridCell.Tab.0.right/0.0.1920.1040@0.0.1920.1040" timestamp="1596111105229" />
     <state x="461" y="164" key="SettingsEditor" timestamp="1595723474066">
       <screen x="0" y="0" width="1920" height="1040" />
     </state>
@@ -282,9 +283,9 @@
       <screen x="0" y="0" width="1920" height="1040" />
     </state>
     <state x="334" y="130" key="new project wizard/0.0.1920.1040@0.0.1920.1040" timestamp="1593619996789" />
-    <state x="623" y="225" width="672" height="678" key="search.everywhere.popup" timestamp="1595723487780">
+    <state x="623" y="225" width="672" height="678" key="search.everywhere.popup" timestamp="1596110296063">
       <screen x="0" y="0" width="1920" height="1040" />
     </state>
-    <state x="623" y="225" width="672" height="678" key="search.everywhere.popup/0.0.1920.1040@0.0.1920.1040" timestamp="1595723487780" />
+    <state x="623" y="225" width="672" height="678" key="search.everywhere.popup/0.0.1920.1040@0.0.1920.1040" timestamp="1596110296063" />
   </component>
 </project>

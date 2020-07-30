@@ -15,13 +15,14 @@ import java.util.ArrayList;
 import java.util.Scanner;
 
 public class Route {
+    private RouteStatus routeStatus=RouteStatus.EMPTY;
     private double distance;
     private int time;
     private ArrayList<String> directionsList;
     private double routeEmissions;
     private String transportType;
     //Replace this string variable with the absolute path to the file your api key is in
-    final static String api_key_path = "C:/Users/Ling/Documents/Pitt/Summer 2020/COE 1530/api_key.txt";
+    final static String api_key_path = "C:/Users/furry/Documents/Mine/Courses/CS1530/New folder/GoogleAPI_key.txt";
     private String apiKey = "";
     String origin;
     String destination;
@@ -116,6 +117,8 @@ public class Route {
             in.close();
         }
         catch(Exception e) {
+            e.printStackTrace();
+            return;
         }
         String json = strBuild.toString();          //This is the full string of results from the query
         
@@ -125,6 +128,19 @@ public class Route {
         JSONObject jb = (JSONObject) obj;
         
         //Read the data
+        String st=((JSONObject) jb.get("status")).toString();
+        if  (st.equals("OK")) {
+            routeStatus = RouteStatus.OK;
+        } else if (st.equals("NOT_FOUND")) {
+            routeStatus = RouteStatus.NOT_FOUND;
+            return;
+        } else if (st.equals("ZERO_RESULTS")) {
+            routeStatus = RouteStatus.ZERO_RESULTS;
+            return;
+        } else {
+            routeStatus = RouteStatus.OTHER;
+            return;
+        }
         JSONArray routesArray = (JSONArray) jb.get("routes");
         JSONObject thisRoute = (JSONObject) routesArray.get(0);
         JSONArray legs = (JSONArray) thisRoute.get("legs");
@@ -206,5 +222,9 @@ public class Route {
 
     public String getPoly() {
         return this.polyLine;
+    }
+
+    public RouteStatus getStatus() {
+        return routeStatus;
     }
 }
