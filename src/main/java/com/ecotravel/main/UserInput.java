@@ -133,7 +133,7 @@ public class UserInput extends JFrame implements ActionListener
 			
 			//Get map image
 			getMap(routesList);
-                        
+      
 			//Sort array list
 			sort = new Sort(routesList);
 			if (sortBy.equals("Emission")) {
@@ -381,7 +381,7 @@ public class UserInput extends JFrame implements ActionListener
             	catch (ParseException e) {
                 	System.out.println("Parse Exception occurred");
                 	e.printStackTrace();
-            	}  
+            	}   
         }
 
         public void getMap(ArrayList<Route> rl) {
