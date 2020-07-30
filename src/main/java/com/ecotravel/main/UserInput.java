@@ -35,7 +35,8 @@ public class UserInput extends JFrame implements ActionListener
     	private static JLabel funfacts;
     	private static ArrayList<Route> routesList; 
     	private static Sort sort;
-	
+	private static final String[] colors={"0x0bba1f", "0x7c0a21", "0xe13d95", "0x813498"};
+
 	public UserInput() 
 	{
         	setTitle("EcoTravel");
@@ -361,6 +362,7 @@ public class UserInput extends JFrame implements ActionListener
                         routesList.remove(route);
                     }
                 }
+				getMap(routesList);
             }
             catch (MalformedURLException e) {
                 System.out.println("Malformed url exception occurred");
@@ -382,8 +384,9 @@ public class UserInput extends JFrame implements ActionListener
 
         public void getMap(ArrayList<Route> rl) {
 			String uimg="https://maps.googleapis.com/maps/api/staticmap?size=" + 300 + "x" + 200;
+			int i=0;
 			for (Route r: rl) {
-				uimg += "&path=enc:" + r.getPoly();
+				uimg += "&path=color:" + colors[i++] + "|enc:" + r.getPoly();
 			}
 			uimg += "&key=" + rl.get(0).getKey();
 			try {

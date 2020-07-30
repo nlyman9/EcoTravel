@@ -21,7 +21,7 @@ public class Route {
     private double routeEmissions;
     private String transportType;
     //Replace this string variable with the absolute path to the file your api key is in
-    final static String api_key_path = "D:/Coding/NetBeansProjects/EcoTravel API Key/api-key.txt";
+    final static String api_key_path = "C:/Users/furry/Documents/Mine/Courses/CS1530/tmp/apikey.txt";
     private String apiKey = "";
     String origin;
     String destination;
